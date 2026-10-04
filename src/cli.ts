@@ -37,12 +37,34 @@ Flags:
 
 CSV columns (header row): input,name,domain,github,x,npm,ats
 
+Environment:
+  ISITDEAD_CACHE_DIR  cache directory (default ~/.cache/isitdead)
+  NO_COLOR            disable colored output
+
+Exit codes: 0 ALIVE, 2 DORMANT, 3 DEAD, 4 UNKNOWN, 1 usage or runtime error.
+(batch, serve and demo-flaky exit 0 on success.)
+
 Every signal is alive, dead, or unknown. Errors (rate limits, 5xx, timeouts)
 are unknown, never dead. Every negative is re-checked serially with backoff.
 `;
 
+const DEMO_NOTE =
+  'A fake profile API answers "User not found" whenever more than 2 requests are in flight. ' +
+  '20 accounts (5 truly gone) are swept at concurrency 6, then every negative is re-checked serially.';
+
+/** Parse a positive integer flag, or fail with a usage error instead of silently using NaN. */
+function positiveInt(flag: string, raw: string | undefined, fallback: number): number {
+  if (raw === undefined) return fallback;
+  const n = Number(raw);
+  if (!Number.isInteger(n) || n < 1) throw new UsageError(`${flag} must be a positive integer, got "${raw}"`);
+  return n;
+}
+
+class UsageError extends Error {}
+
 async function main() {
   const { values, positionals } = parseArgs({
+    strict: true,
     allowPositionals: true,
     options: {
       name: { type: 'string' },
@@ -73,24 +95,28 @@ async function main() {
 
   if (cmd === 'demo-flaky') {
     const b = await flakyDemo();
-    console.log('Simulated profile API that answers "User not found" when more than 2 requests are in flight.');
-    console.log('20 accounts, 5 truly gone, swept at concurrency 6.\n');
-    console.log(values.json ? JSON.stringify(b, null, 2) : formatBatch(b));
+    if (values.json) {
+      console.log(JSON.stringify({ simulated: true, description: DEMO_NOTE, ...b }, null, 2));
+      return;
+    }
+    console.log(`SIMULATED, OFFLINE. ${DEMO_NOTE}\n`);
+    console.log(formatBatch(b));
+    console.log('\nAll numbers above come from the in-process simulation, not from real accounts.');
     return;
   }
 
   if (cmd === 'serve') {
-    serve(deps, Number(values.port ?? 8787));
+    serve(deps, positiveInt('--port', values.port, 8787));
     return;
   }
 
   if (cmd === 'batch') {
-    if (!arg) throw new Error('batch needs a CSV file');
+    if (!arg) throw new UsageError('batch needs a CSV file: isitdead batch <file.csv>');
     const targets = targetsFromCsv(await readFile(arg, 'utf8'));
     if (!targets.length) throw new Error(`no targets in ${arg}`);
     const b = await batch(targets, deps, {
       ...options,
-      concurrency: values.concurrency ? Number(values.concurrency) : 6,
+      concurrency: positiveInt('--concurrency', values.concurrency, 6),
       onProgress: (m) => process.stderr.write(`  ${m}\n`),
     });
     const json = JSON.stringify(
@@ -128,6 +154,7 @@ async function main() {
 }
 
 main().catch((e) => {
-  console.error(`isitdead: ${(e as Error).message}`);
+  const hint = e instanceof UsageError || (e as { code?: string }).code?.startsWith('ERR_PARSE_ARGS') ? ' (see isitdead --help)' : '';
+  console.error(`isitdead: ${(e as Error).message}${hint}`);
   process.exitCode = 1;
 });
