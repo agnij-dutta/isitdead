@@ -1,5 +1,4 @@
-Simulated profile API that answers "User not found" when more than 2 requests are in flight.
-20 accounts, 5 truly gone, swept at concurrency 6.
+SIMULATED, OFFLINE. A fake profile API answers "User not found" whenever more than 2 requests are in flight. 20 accounts (5 truly gone) are swept at concurrency 6, then every negative is re-checked serially.
 
 TARGET      VERDICT  CONF  TOP REASON
 @account01  ALIVE     71%  + x-activity: last tweet 3 days ago (2026-10-01) (parallel pass said DEAD)
@@ -32,3 +31,5 @@ Error vs absence report
   Parallel-pass false-negative rate: 75% of negatives did not survive confirmation
   Errored signals retried: 0 (0 recovered, 0 still erroring, none counted as dead)
   Verdicts changed by confirmation: 15 (15 would have been wrongly reported DEAD)
+
+All numbers above come from the in-process simulation, not from real accounts.
