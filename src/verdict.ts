@@ -5,12 +5,35 @@ const round2 = (n: number) => Math.round(n * 100) / 100;
 /**
  * Combine signals into ALIVE / DORMANT / DEAD / UNKNOWN.
  *
- *   alive  = sum of alive weights
- *   gone   = sum of dead weights where the thing no longer exists
- *   stale  = sum of dead weights where it exists but is abandoned
+ * Each signal carries a weight in 0..1. Rough scale: 1.0 settles the question
+ * on its own (all repos archived, a shutdown notice, a parked domain, recent
+ * original commits), 0.5 to 0.8 is strong, 0.1 to 0.3 is supporting only
+ * (DNS resolves, valid TLS, HTTP 200).
  *
- * Unknown signals (errors or inconclusive) contribute nothing, and errors
- * lower confidence. A verdict can never be DEAD on errors alone.
+ *   A (alive) = sum of alive weights
+ *   G (gone)  = sum of dead weights with kind "gone"  (it no longer exists)
+ *   S (stale) = sum of dead weights with kind "stale" (exists, abandoned)
+ *   U         = count of errored signals
+ *
+ * Unknown signals (errors or inconclusive) contribute nothing to A, G or S.
+ * A verdict can never be DEAD or DORMANT on errors alone.
+ *
+ * Rules, first match wins (decisive = A + G + S):
+ *   decisive < 0.3                       -> UNKNOWN
+ *   G >= 1 and G > A                     -> DEAD
+ *   G >= 0.5 and A == 0 and G >= S       -> DEAD
+ *   A >= 1 and A >= G + S                -> ALIVE
+ *   G + S > A                            -> DORMANT
+ *   otherwise                            -> ALIVE (weak)
+ *
+ * Confidence (0.1 to 0.97):
+ *   margin   = |winning side - losing side| / decisive    (how one-sided)
+ *   coverage = min(1, decisive / 2.5)                     (how much evidence)
+ *   penalty  = max(0.5, 1 - 0.1 * U)                      (each error costs 10%)
+ *   confidence = (0.55 * margin + 0.45 * coverage) * penalty
+ * capped at 0.97 because public signals can always be wrong (see the name
+ * reuse limitation in the README). For UNKNOWN, confidence is a fixed 0.2,
+ * or 0.1 when errors were involved: it says how little we know.
  */
 export function decide(signals: SignalResult[]): Verdict {
   let A = 0,
@@ -52,6 +75,7 @@ export function decide(signals: SignalResult[]): Verdict {
   return { verdict, confidence: round2(confidence), why, scores };
 }
 
+/** Top decisive signals by weight ("+" alive, "-" dead), then every error ("?"). */
 function explain(signals: SignalResult[]): string[] {
   const decisive = signals
     .filter((s) => s.state !== 'unknown' && s.weight > 0)

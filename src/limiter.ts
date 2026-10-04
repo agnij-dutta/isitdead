@@ -1,6 +1,11 @@
 /**
  * Per-host politeness: caps in-flight requests per host and enforces a
  * minimum gap between request starts to the same host.
+ *
+ * Shared by every probe and every target in a run, so a batch of 100
+ * targets still sends GitHub at most 2 requests at a time, 500 ms apart.
+ * Waiters are woken in FIFO order but a newcomer can take a freed slot
+ * first; that only affects ordering, never the limits.
  */
 export interface HostPolicy {
   maxConcurrent: number;
@@ -23,6 +28,7 @@ interface HostState {
   waiters: Array<() => void>;
 }
 
+/** Keyed by URL host (including port). Hosts not in HOST_POLICIES get DEFAULT_POLICY. */
 export class HostLimiter {
   private hosts = new Map<string, HostState>();
   constructor(
@@ -31,6 +37,7 @@ export class HostLimiter {
     private clock: () => number = Date.now,
   ) {}
 
+  /** Run `fn` once a slot for `host` is free and the minimum gap has passed. */
   async run<T>(host: string, fn: () => Promise<T>): Promise<T> {
     await this.acquire(host);
     try {
