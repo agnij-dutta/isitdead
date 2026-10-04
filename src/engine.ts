@@ -8,16 +8,23 @@ import { systemTls, type TlsProber } from './signals/tls.js';
 import type { Report, SignalResult, Target, Verdict } from './types.js';
 import { decide } from './verdict.js';
 
+/**
+ * Injected dependencies. Only `http` is required; everything else defaults
+ * to the real system implementation. Tests swap these for fakes.
+ */
 export interface EngineDeps {
   http: HttpClient;
+  /** Default: Node's resolver (A, AAAA, CNAME), 5 s timeout, 2 tries. */
   dns?: DnsResolver;
+  /** Default: a TLS handshake on :443 with an 8 s idle timeout. */
   tls?: TlsProber;
   now?: () => Date;
   sleep?: (ms: number) => Promise<void>;
+  /** Default: ALL_PROBES. */
   probes?: Probe[];
-  /** Backoff before each serial re-check attempt, in ms. Length = max attempts. */
+  /** Backoff before each serial re-check attempt, in ms. Length = max attempts. Default [1000, 3000, 8000]. */
   backoffMs?: number[];
-  /** Upper bound on honoring Retry-After during confirmation. */
+  /** Upper bound on honoring Retry-After during confirmation. Default 30 s. */
   maxRetryAfterMs?: number;
 }
 
@@ -77,8 +84,10 @@ async function runProbe(probe: Probe, target: Target, ctx: Ctx): Promise<SignalR
   try {
     return await probe.run(target, ctx);
   } catch (e) {
-    // A crashing probe is an error, never a negative.
-    return [errored(ctx, probe.id as SignalResult['signal'], `${probe.id} check crashed: ${(e as Error).message} (not counted as dead)`)];
+    // A crashing probe is an error, never a negative. Report it under every
+    // signal the probe owns so confirmation can match the retry to it.
+    const msg = `${probe.id} check crashed: ${(e as Error).message} (not counted as dead)`;
+    return probe.signals.map((name) => errored(ctx, name, msg));
   }
 }
 
@@ -95,8 +104,25 @@ const isError = (s: SignalResult) => s.state === 'unknown' && s.unknownReason ==
 
 /**
  * Phase 2: confirm every negative serially, with backoff, bypassing the cache.
- * Errored signals get the same retries. A negative that cannot be re-checked
- * cleanly is downgraded to unknown: an error is never reported as "dead".
+ *
+ * For each probe that produced a dead or errored signal, the whole probe is
+ * re-run (one target at a time, one probe at a time) up to `backoff.length`
+ * times. Before each attempt we sleep for the backoff step, or for the
+ * server's Retry-After when that is longer (capped at `maxRetryAfterMs`).
+ *
+ * Outcomes per signal:
+ *   dead  -> alive          : flipped-alive (the parallel pass was wrong)
+ *   dead  -> dead           : confirmed
+ *   dead  -> unknown/error  : unconfirmed, downgraded to unknown(error)
+ *   error -> clean answer   : recovered
+ *   error -> error          : still-error
+ *   inconclusive -> clean   : refreshed (a sibling signal that was skipped
+ *                             because its parent check failed, e.g. hosting
+ *                             and content when the homepage fetch errored)
+ *
+ * An error is never reported as "dead". A negative that first appears in
+ * this phase (recovered or refreshed) came from a serial, cache-bypassing
+ * request, which is the same standard a confirmed negative meets.
  */
 export async function confirm(d: Discovery, deps: EngineDeps, options: RunOptions, stats: ConfirmStats): Promise<SignalResult[]> {
   const ctx = ctxFor(deps, options, true);
@@ -124,6 +150,7 @@ export async function confirm(d: Discovery, deps: EngineDeps, options: RunOption
     const resolved = new Map<string, { r: SignalResult; attempts: number }>();
     const lastError = new Map<string, SignalResult>();
     let extra: SignalResult[] = [];
+    let lastFresh: SignalResult[] = [];
     let attempts = 0;
     let retryAfterMs = 0;
     for (const wait of backoff) {
@@ -131,6 +158,7 @@ export async function confirm(d: Discovery, deps: EngineDeps, options: RunOption
       attempts++;
       stats.attempts++;
       const fresh = await runProbe(run.probe, d.target, ctx);
+      lastFresh = fresh;
       retryAfterMs = 0;
       for (const [name] of pending) {
         if (resolved.has(name)) continue;
@@ -152,12 +180,17 @@ export async function confirm(d: Discovery, deps: EngineDeps, options: RunOption
 
     for (const orig of run.results) {
       const p = pending.get(orig.signal);
+      const base = { attempts, originalState: orig.state, originalSummary: orig.summary };
       if (!p) {
-        out.push(orig);
+        const refreshed = orig.state === 'unknown' ? lastFresh.find((x) => x.signal === orig.signal) : undefined;
+        if (refreshed && !isError(refreshed) && (refreshed.state !== 'unknown' || refreshed.summary !== orig.summary)) {
+          out.push({ ...refreshed, confirmation: { ...base, outcome: 'refreshed' } });
+        } else {
+          out.push(orig);
+        }
         continue;
       }
       const res = resolved.get(orig.signal);
-      const base = { attempts, originalState: orig.state, originalSummary: orig.summary };
       if (orig.state === 'dead') {
         if (res && res.r.state === 'alive') {
           stats.flippedAlive++;
@@ -209,6 +242,7 @@ export interface CheckResult {
   discoveryVerdict: Verdict;
 }
 
+/** Check one target: parallel discovery, then serial confirmation of every negative and error. */
 export async function check(target: Target, deps: EngineDeps, options: RunOptions = {}): Promise<CheckResult> {
   const d = await discover(target, deps, options);
   const discoverySignals = d.runs.flatMap((r) => r.results);

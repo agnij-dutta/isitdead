@@ -1,9 +1,15 @@
 import type { Cache } from './cache.js';
 import { HostLimiter } from './limiter.js';
 
+/** Keep in sync with package.json (a test checks this). */
 export const VERSION = '0.1.0';
-export const USER_AGENT = `isitdead/${VERSION} (liveness checker; polite, cached; +https://x.com/0xholmesdev)`;
+/**
+ * Identifies the tool to every server it talks to, with a link operators can
+ * follow to see what it does. Do not spoof a browser user-agent.
+ */
+export const USER_AGENT = `isitdead/${VERSION} (liveness checker; polite, cached; +https://github.com/agnij-dutta/isitdead)`;
 
+/** Injection point for tests and the offline demo. Same shape as global fetch. */
 export type FetchLike = (url: string, init?: RequestInit) => Promise<Response>;
 
 export interface Hop {
@@ -18,6 +24,8 @@ export type HttpResult =
       status: number;
       headers: Record<string, string>;
       body: string;
+      /** True when the body hit `maxBodyBytes` and was cut off. A truncated JSON body will not parse. */
+      truncated: boolean;
       /** Final URL after redirects (or the request URL when not following). */
       url: string;
       chain: Hop[];
@@ -41,6 +49,7 @@ export interface RequestOptions {
   timeoutMs?: number;
 }
 
+/** Defaults: 15 s per request (per redirect hop), 5 MB body cap, 10 redirects. */
 export interface HttpClientOptions {
   fetch?: FetchLike;
   cache?: Cache;
@@ -100,7 +109,17 @@ export class HttpClient {
     const key = `GET ${url} ${JSON.stringify(opts.headers ?? {})}`;
     if (this.cache && !opts.fresh) {
       const hit = await this.cache.get(key);
-      if (hit) return { ok: true, status: hit.status, headers: hit.headers, body: hit.body, url, chain: [], fromCache: true };
+      if (hit)
+        return {
+          ok: true,
+          status: hit.status,
+          headers: hit.headers,
+          body: hit.body,
+          truncated: !!hit.truncated,
+          url,
+          chain: [],
+          fromCache: true,
+        };
     }
     let host: string;
     try {
@@ -121,11 +140,11 @@ export class HttpClient {
         });
         const headers: Record<string, string> = {};
         res.headers.forEach((v, k) => (headers[k.toLowerCase()] = v));
-        const body = await readCapped(res, this.maxBodyBytes);
+        const { body, truncated } = await readCapped(res, this.maxBodyBytes);
         if (this.cache && cacheable(res.status)) {
-          await this.cache.set(key, { status: res.status, headers, body, url, storedAt: Date.now() });
+          await this.cache.set(key, { status: res.status, headers, body, truncated, url, storedAt: Date.now() });
         }
-        return { ok: true as const, status: res.status, headers, body, url, chain: [], fromCache: false };
+        return { ok: true as const, status: res.status, headers, body, truncated, url, chain: [], fromCache: false };
       } catch (e) {
         const err = e as Error & { cause?: { code?: string; message?: string } };
         const aborted = err.name === 'AbortError' || ctrl.signal.aborted;
@@ -139,22 +158,29 @@ export class HttpClient {
   }
 }
 
-async function readCapped(res: Response, max: number): Promise<string> {
-  if (!res.body) return '';
+/**
+ * Read at most `max` bytes. Some public endpoints return enormous bodies
+ * (an Ashby board with full descriptions can exceed 13 MB); we stop reading
+ * and say so rather than buffering it all.
+ */
+async function readCapped(res: Response, max: number): Promise<{ body: string; truncated: boolean }> {
+  if (!res.body) return { body: '', truncated: false };
   const reader = res.body.getReader();
   const chunks: Uint8Array[] = [];
   let total = 0;
+  let truncated = false;
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
     chunks.push(value);
     total += value.byteLength;
     if (total >= max) {
+      truncated = true;
       await reader.cancel().catch(() => {});
       break;
     }
   }
-  return new TextDecoder('utf-8', { fatal: false }).decode(Buffer.concat(chunks));
+  return { body: new TextDecoder('utf-8', { fatal: false }).decode(Buffer.concat(chunks)), truncated };
 }
 
 /**
@@ -186,6 +212,7 @@ export function classifyApi(r: HttpResult): ApiOutcome {
   return { kind: 'error', reason: `unexpected status ${s}`, status: s, retryAfterSec: retryAfter };
 }
 
+/** Retry-After is either delta-seconds or an HTTP date (RFC 9110 section 10.2.3). */
 function parseRetryAfter(v: string | undefined): number | undefined {
   if (!v) return undefined;
   const n = Number(v);
@@ -194,6 +221,7 @@ function parseRetryAfter(v: string | undefined): number | undefined {
   return Number.isFinite(d) ? Math.max(0, Math.round((d - Date.now()) / 1000)) : undefined;
 }
 
+/** JSON.parse that returns undefined instead of throwing. */
 export function safeJson<T = unknown>(body: string): T | undefined {
   try {
     return JSON.parse(body) as T;

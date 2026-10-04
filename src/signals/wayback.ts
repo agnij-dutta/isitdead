@@ -1,4 +1,4 @@
-import { daysBetween, dead, fromApiError, humanAge, inconclusive, type Probe } from '../context.js';
+import { daysBetween, dead, errored, fromApiError, humanAge, inconclusive, type Probe } from '../context.js';
 import { classifyApi, safeJson } from '../http.js';
 
 function parseTs(ts: string): Date {
@@ -11,6 +11,7 @@ function parseTs(ts: string): Date {
  */
 export const waybackProbe: Probe = {
   id: 'wayback',
+  signals: ['wayback'],
   applies: (t, o) => !!t.domain && !!o.wayback,
   async run(t, ctx) {
     const url = `https://web.archive.org/cdx/search/cdx?url=${encodeURIComponent(t.domain!)}&output=json&fl=timestamp,statuscode,digest&filter=statuscode:200&collapse=digest&limit=-3`;
@@ -19,7 +20,9 @@ export const waybackProbe: Probe = {
     if (o.kind === 'error') return [fromApiError(ctx, 'wayback', 'Wayback CDX', o, url)];
     if (o.kind === 'absent') return [inconclusive(ctx, 'wayback', 'Wayback has no index for this domain', { source: url })];
     const rows = r.ok ? safeJson<string[][]>(r.body) : undefined;
-    const data = (rows ?? []).slice(1).filter((x) => x[0]);
+    if (!Array.isArray(rows))
+      return [errored(ctx, 'wayback', 'Wayback CDX returned an unparseable body (not counted as dead)', { source: url })];
+    const data = rows.slice(1).filter((x) => x[0]);
     if (!data.length) return [inconclusive(ctx, 'wayback', 'no successful Wayback captures', { source: url })];
     const last = data[data.length - 1]!;
     const when = parseTs(last[0]!);

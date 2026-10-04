@@ -24,6 +24,8 @@ function confirmNote(s: SignalResult): string {
       return c('35', `  (downgraded from dead: could not re-confirm)`);
     case 'recovered':
       return c('90', `  (errored in parallel pass, recovered on retry ${k.attempts})`);
+    case 'refreshed':
+      return c('90', `  (filled in on serial re-check)`);
     case 'still-error':
       return c('90', `  (still erroring after ${k.attempts} retries)`);
   }

@@ -33,6 +33,7 @@ export const systemDns: DnsResolver = async (host) => {
 
 export const dnsProbe: Probe = {
   id: 'dns',
+  signals: ['dns'],
   applies: (t) => !!t.domain,
   async run(t, ctx) {
     const host = t.domain!;

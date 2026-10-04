@@ -58,6 +58,7 @@ interface FxUser {
  */
 export const xProbe: Probe = {
   id: 'x',
+  signals: ['x-profile', 'x-activity'],
   applies: (t) => !!t.x,
   async run(t, ctx) {
     const h = t.x!.replace(/^@/, '');

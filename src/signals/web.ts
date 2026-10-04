@@ -25,6 +25,7 @@ export function siteOf(host: string): string {
   return parts.slice(twoLevel ? -3 : -2).join('.');
 }
 
+/** GET the homepage over https, falling back to plain http only for TLS-level or refused-connection failures. */
 async function fetchHome(domain: string, ctx: Ctx): Promise<{ r: HttpResult; attempts: string[] }> {
   const attempts: string[] = [];
   const opts = { follow: true, fresh: ctx.fresh, headers: { accept: 'text/html,application/xhtml+xml;q=0.9,*/*;q=0.8' } };
@@ -35,12 +36,24 @@ async function fetchHome(domain: string, ctx: Ctx): Promise<{ r: HttpResult; att
   const http = `http://${domain}/`;
   attempts.push(http);
   const r2 = await ctx.http.get(http, opts);
-  // If plain http also fails, report the original https error (more informative).
-  return { r: r2.ok ? r2 : r, attempts };
+  if (r2.ok) return { r: r2, attempts };
+  // Both failed. "Refused on 443 and 80" is a clean negative only when BOTH
+  // were refused. If https was refused but http timed out (or vice versa),
+  // the honest answer is the error, so report the non-refused failure.
+  if (r.code === 'ECONNREFUSED' && r2.code !== 'ECONNREFUSED') return { r: r2, attempts };
+  // Otherwise keep the https error: it is usually the more informative one.
+  return { r, attempts };
 }
 
+/**
+ * One homepage fetch (redirects followed and recorded) yields three signals:
+ *   http    : status and redirect chain; a cross-site redirect is weak "gone"
+ *   hosting : host suspension, parked or missing-site pages (see patterns.ts)
+ *   content : shutdown notice in the title/h1, or the page no longer names the entity
+ */
 export const webProbe: Probe = {
   id: 'web',
+  signals: ['http', 'hosting', 'content'],
   applies: (t) => !!t.domain,
   async run(t, ctx) {
     const domain = t.domain!;

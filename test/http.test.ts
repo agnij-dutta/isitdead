@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { classifyApi, USER_AGENT } from '../src/http.js';
+import { readFileSync } from 'node:fs';
+import { classifyApi, HttpClient, USER_AGENT, VERSION, type HttpResult } from '../src/http.js';
 import { client, html, json, mockFetch, redirect } from './helpers.js';
 
 describe('HttpClient', () => {
@@ -60,8 +61,16 @@ describe('HttpClient', () => {
 });
 
 describe('classifyApi: error is not absence', () => {
-  const r = (status: number, headers: Record<string, string> = {}) =>
-    ({ ok: true, status, headers, body: '', url: 'u', chain: [], fromCache: false }) as const;
+  const r = (status: number, headers: Record<string, string> = {}): HttpResult => ({
+    ok: true,
+    status,
+    headers,
+    body: '',
+    truncated: false,
+    url: 'u',
+    chain: [],
+    fromCache: false,
+  });
 
   it('only 404 and 410 are absence', () => {
     expect(classifyApi(r(404)).kind).toBe('absent');
@@ -86,5 +95,24 @@ describe('classifyApi: error is not absence', () => {
   it('carries Retry-After', () => {
     const o = classifyApi(r(429, { 'retry-after': '7' }));
     expect(o.kind === 'error' && o.retryAfterSec).toBe(7);
+  });
+});
+
+describe('package metadata', () => {
+  it('VERSION matches package.json', () => {
+    const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')) as { version: string };
+    expect(VERSION).toBe(pkg.version);
+  });
+});
+
+describe('body size cap', () => {
+  it('flags a truncated body instead of silently returning a partial one', async () => {
+    const big = 'x'.repeat(5000);
+    const f = mockFetch([['https://big.test/', () => html(big)]]);
+    const c = new HttpClient({ fetch: f, maxBodyBytes: 1000 });
+    const r = await c.get('https://big.test/');
+    expect(r.ok && r.truncated).toBe(true);
+    const small = await new HttpClient({ fetch: mockFetch([['https://s.test/', () => html('ok')]]) }).get('https://s.test/');
+    expect(small.ok && small.truncated).toBe(false);
   });
 });

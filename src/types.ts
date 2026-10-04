@@ -31,8 +31,10 @@ export interface Confirmation {
    * unconfirmed   : negative could not be re-checked cleanly; downgraded to unknown
    * recovered     : an errored signal got a clean answer on retry
    * still-error   : an errored signal kept erroring
+   * refreshed     : was inconclusive only because a sibling check failed
+   *                 (e.g. no page to read); filled in from the serial re-check
    */
-  outcome: 'confirmed' | 'flipped-alive' | 'unconfirmed' | 'recovered' | 'still-error';
+  outcome: 'confirmed' | 'flipped-alive' | 'unconfirmed' | 'recovered' | 'still-error' | 'refreshed';
 }
 
 export interface SignalResult {

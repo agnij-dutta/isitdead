@@ -109,7 +109,7 @@ describe('npm', () => {
 
 describe('x via fxtwitter', () => {
   const FX = 'https://api.fxtwitter.com/2/profile/';
-  const user = (description: string) => json({ code: 200, message: 'OK', user: { screen_name: 'jane', description, followers: 10 } });
+  const user = (description: string) => json({ code: 200, message: 'OK', user: { screen_name: 'example_co', description, followers: 10 } });
   const statuses = (days: number) => json({ code: 200, results: [{ created_timestamp: Math.floor(Date.parse(daysAgo(days)) / 1000) }] });
 
   it('bio "EX vp product" is stale', async () => {
@@ -117,7 +117,7 @@ describe('x via fxtwitter', () => {
       [/statuses$/, () => statuses(5)],
       [FX, () => user('EX vp product @acme. now building.')],
     ]);
-    const rs = await xProbe.run(buildTarget('@jane'), ctx(f));
+    const rs = await xProbe.run(buildTarget('@example_co'), ctx(f));
     const p = rs.find((r) => r.signal === 'x-profile')!;
     expect(p.state).toBe('dead');
     expect(p.kind).toBe('stale');
@@ -138,20 +138,20 @@ describe('x via fxtwitter', () => {
 
   it('clean JSON 404 is dead (gone)', async () => {
     const f = mockFetch([[FX, () => json({ code: 404, message: 'User not found' }, 404)]]);
-    const rs = await xProbe.run(buildTarget('@nobody'), ctx(f));
+    const rs = await xProbe.run(buildTarget('@missing_example'), ctx(f));
     expect(rs[0]!.state).toBe('dead');
   });
 
   it('429 is UNKNOWN, never dead', async () => {
     const f = mockFetch([[FX, () => json({ code: 429 }, 429)]]);
-    const rs = await xProbe.run(buildTarget('@jane'), ctx(f));
+    const rs = await xProbe.run(buildTarget('@example_co'), ctx(f));
     expect(rs[0]!.state).toBe('unknown');
     expect(rs[0]!.unknownReason).toBe('error');
   });
 
   it('v1-style 302 to the FxEmbed repo is UNKNOWN, not "not found"', async () => {
     const f = mockFetch([[FX, () => redirect('https://github.com/FxEmbed/FxEmbed', 302)]]);
-    const rs = await xProbe.run(buildTarget('@jane'), ctx(f));
+    const rs = await xProbe.run(buildTarget('@example_co'), ctx(f));
     expect(rs[0]!.state).toBe('unknown');
     expect(rs[0]!.summary).toMatch(/redirect/);
   });
@@ -165,8 +165,8 @@ describe('x via fxtwitter', () => {
       [/statuses$/, () => statuses(2)],
       [FX, () => user('building')],
     ]);
-    expect((await xProbe.run(buildTarget('@jane'), ctx(old))).find((r) => r.signal === 'x-activity')!.state).toBe('dead');
-    expect((await xProbe.run(buildTarget('@jane'), ctx(fresh))).find((r) => r.signal === 'x-activity')!.state).toBe('alive');
+    expect((await xProbe.run(buildTarget('@example_co'), ctx(old))).find((r) => r.signal === 'x-activity')!.state).toBe('dead');
+    expect((await xProbe.run(buildTarget('@example_co'), ctx(fresh))).find((r) => r.signal === 'x-activity')!.state).toBe('alive');
   });
 
   it('timeline error does not poison the profile signal', async () => {
@@ -174,7 +174,7 @@ describe('x via fxtwitter', () => {
       [/statuses$/, () => json({}, 500)],
       [FX, () => user('building')],
     ]);
-    const rs = await xProbe.run(buildTarget('@jane'), ctx(f));
+    const rs = await xProbe.run(buildTarget('@example_co'), ctx(f));
     expect(rs.find((r) => r.signal === 'x-profile')!.state).toBe('alive');
     expect(rs.find((r) => r.signal === 'x-activity')!.unknownReason).toBe('error');
   });

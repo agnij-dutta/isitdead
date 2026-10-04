@@ -35,6 +35,7 @@ export const systemTls: TlsProber = (host) =>
 
 export const tlsProbe: Probe = {
   id: 'tls',
+  signals: ['tls'],
   applies: (t) => !!t.domain,
   async run(t, ctx) {
     const host = t.domain!;

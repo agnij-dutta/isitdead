@@ -1,4 +1,4 @@
-import { alive, daysBetween, dead, fromApiError, humanAge, inconclusive, type Probe } from '../context.js';
+import { alive, daysBetween, dead, errored, fromApiError, humanAge, type Probe } from '../context.js';
 import { classifyApi, safeJson } from '../http.js';
 
 interface Repo {
@@ -17,6 +17,7 @@ interface Repo {
  */
 export const githubProbe: Probe = {
   id: 'github',
+  signals: ['github'],
   applies: (t) => !!t.github,
   async run(t, ctx) {
     const owner = t.github!;
@@ -36,7 +37,9 @@ export const githubProbe: Probe = {
       ];
     }
     const repos = r.ok ? safeJson<Repo[]>(r.body) : undefined;
-    if (!Array.isArray(repos)) return [inconclusive(ctx, 'github', 'GitHub returned an unparseable body', { source: url })];
+    // A 200 we cannot read is a failed check, not evidence: retry it during confirmation.
+    if (!Array.isArray(repos))
+      return [errored(ctx, 'github', 'GitHub returned an unparseable body (not counted as dead)', { source: url })];
     if (repos.length === 0) {
       return [
         dead(ctx, 'github', 'stale', 0.3, `GitHub account "${owner}" exists but has no public repos`, {

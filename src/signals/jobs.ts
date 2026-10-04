@@ -5,8 +5,17 @@ import type { Target } from '../types.js';
 interface Board {
   ats: 'greenhouse' | 'ashby' | 'lever';
   url: (slug: string) => string;
+  /** Number of listed postings in a parsed body, or undefined if the shape is unexpected. */
   count: (json: unknown) => number | undefined;
+  /**
+   * Lower bound on postings in a body that was cut off at the size cap, by
+   * counting a per-posting marker. Undefined when the text proves nothing.
+   */
+  countPartial?: (text: string) => number | undefined;
 }
+
+/** Count regex matches, or undefined for zero (zero matches in a fragment proves nothing). */
+const matches = (text: string, re: RegExp) => text.match(re)?.length || undefined;
 
 export const LEVER_LIMIT = 100;
 
@@ -15,6 +24,7 @@ export const BOARDS: Board[] = [
     ats: 'greenhouse',
     url: (s) => `https://boards-api.greenhouse.io/v1/boards/${encodeURIComponent(s)}/jobs`,
     count: (j) => (Array.isArray((j as { jobs?: unknown[] })?.jobs) ? (j as { jobs: unknown[] }).jobs.length : undefined),
+    countPartial: (text) => matches(text, /"absolute_url"\s*:/g),
   },
   {
     ats: 'ashby',
@@ -23,15 +33,20 @@ export const BOARDS: Board[] = [
       const jobs = (j as { jobs?: Array<{ isListed?: boolean }> })?.jobs;
       return Array.isArray(jobs) ? jobs.filter((x) => x.isListed !== false).length : undefined;
     },
+    // Ashby has no page-size parameter and returns full descriptions: a large
+    // board is 10+ MB, past our body cap.
+    countPartial: (text) => matches(text, /"isListed"\s*:\s*true/g),
   },
   {
     ats: 'lever',
     // Lever returns full descriptions (6 MB for big boards); cap the page.
     url: (s) => `https://api.lever.co/v0/postings/${encodeURIComponent(s)}?mode=json&limit=${LEVER_LIMIT}`,
     count: (j) => (Array.isArray(j) ? j.length : undefined),
+    countPartial: (text) => matches(text, /"hostedUrl"\s*:/g),
   },
 ];
 
+/** Board slugs to try: the explicit --ats slug, or up to two guesses from the name and domain. */
 export function slugCandidates(t: Target): { slugs: string[]; guessed: boolean } {
   if (t.ats) return { slugs: [t.ats.toLowerCase()], guessed: false };
   const set = new Set<string>();
@@ -60,10 +75,11 @@ export function slugCandidates(t: Target): { slugs: string[]; guessed: boolean }
  */
 export const jobsProbe: Probe = {
   id: 'jobs',
+  signals: ['jobs'],
   applies: (t) => !!(t.ats || t.name || t.domain),
   async run(t, ctx) {
     const { slugs, guessed } = slugCandidates(t);
-    const found: Array<{ ats: string; slug: string; count: number; url: string }> = [];
+    const found: Array<{ ats: string; slug: string; count: number; url: string; partial?: boolean }> = [];
     const errors: Array<{ ats: string; slug: string; reason: string; url: string }> = [];
     const absent: string[] = [];
     for (const slug of slugs) {
@@ -77,7 +93,12 @@ export const jobsProbe: Probe = {
       for (const { b, url, r, o } of results) {
         if (o.kind === 'error') errors.push({ ats: b.ats, slug, reason: o.reason, url });
         else if (o.kind === 'absent') absent.push(`${b.ats}/${slug}`);
-        else {
+        else if (r.ok && r.truncated) {
+          // A cut-off body cannot prove "zero roles", only "at least N".
+          const n = b.countPartial?.(r.body);
+          if (n) found.push({ ats: b.ats, slug, count: n, url, partial: true });
+          else errors.push({ ats: b.ats, slug, reason: 'response too large, truncated before any posting', url });
+        } else {
           const n = r.ok ? b.count(safeJson(r.body)) : undefined;
           if (n === undefined) errors.push({ ats: b.ats, slug, reason: 'unparseable body', url });
           else found.push({ ats: b.ats, slug, count: n, url });
@@ -90,7 +111,7 @@ export const jobsProbe: Probe = {
       const f = withJobs[0]!;
       const total = withJobs.reduce((s, x) => s + x.count, 0);
       const guessNote = guessed ? ` (slug "${f.slug}" guessed from the name; verify it is the same company)` : '';
-      const capped = withJobs.some((x) => x.ats === 'lever' && x.count >= LEVER_LIMIT) ? '+' : '';
+      const capped = withJobs.some((x) => x.partial || (x.ats === 'lever' && x.count >= LEVER_LIMIT)) ? '+' : '';
       return [
         alive(
           ctx,
@@ -101,7 +122,9 @@ export const jobsProbe: Probe = {
         ),
       ];
     }
-    if (found.length) {
+    // An empty board is only a negative when every other board answered
+    // cleanly: if one errored, the roles may be there.
+    if (found.length && !errors.length) {
       const f = found[0]!;
       return [
         dead(ctx, 'jobs', 'stale', 0.3, `job board exists on ${f.ats}/${f.slug} but has 0 open roles`, { source: f.url, evidence: ev }),

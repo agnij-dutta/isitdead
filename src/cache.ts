@@ -7,15 +7,21 @@ export interface CachedResponse {
   status: number;
   headers: Record<string, string>;
   body: string;
+  truncated?: boolean;
   url: string;
   storedAt: number;
 }
 
+/**
+ * Response cache. Only clean answers (2xx, 404, 410) are stored, so a cached
+ * entry can never be a rate limit or a server error.
+ */
 export interface Cache {
   get(key: string): Promise<CachedResponse | undefined>;
   set(key: string, value: CachedResponse): Promise<void>;
 }
 
+/** In-process cache, used by tests and the offline demo. */
 export class MemoryCache implements Cache {
   private m = new Map<string, CachedResponse>();
   constructor(
@@ -33,7 +39,13 @@ export class MemoryCache implements Cache {
   }
 }
 
-/** Tiny on-disk cache so re-runs do not hammer public APIs. */
+/**
+ * Tiny on-disk cache so re-runs do not hammer public APIs. One JSON file per
+ * request, keyed by a hash of method, URL and request headers. Default TTL
+ * 6 hours; location `$ISITDEAD_CACHE_DIR` or `~/.cache/isitdead`. Failures
+ * to read or write are ignored: the cache is an optimisation, never a source
+ * of truth.
+ */
 export class FileCache implements Cache {
   constructor(
     private dir = process.env.ISITDEAD_CACHE_DIR ?? join(homedir(), '.cache', 'isitdead'),

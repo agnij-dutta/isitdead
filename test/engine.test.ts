@@ -9,7 +9,7 @@ import type { SignalResult } from '../src/types.js';
 import { daysAgo, deps, json, mockFetch } from './helpers.js';
 
 const FX = 'https://api.fxtwitter.com/2/profile/';
-const liveUser = () => json({ code: 200, user: { screen_name: 'jane', description: 'building', followers: 5 } });
+const liveUser = () => json({ code: 200, user: { screen_name: 'example_co', description: 'building', followers: 5 } });
 const statuses = () => json({ code: 200, results: [{ created_timestamp: Math.floor(Date.parse(daysAgo(2)) / 1000) }] });
 const notFound = () => json({ code: 404, message: 'User not found' }, 404);
 
@@ -20,7 +20,7 @@ describe('serial re-confirmation of negatives', () => {
       [/statuses$/, () => statuses()],
       [FX, () => (n++ === 0 ? notFound() : liveUser())],
     ]);
-    const r = await check(buildTarget('@jane'), deps(f, { probes: [xProbe] }));
+    const r = await check(buildTarget('@example_co'), deps(f, { probes: [xProbe] }));
     const p = r.report.signals.find((s) => s.signal === 'x-profile')!;
     expect(p.state).toBe('alive');
     expect(p.confirmation?.outcome).toBe('flipped-alive');
@@ -33,7 +33,7 @@ describe('serial re-confirmation of negatives', () => {
 
   it('a real 404 is confirmed and stays dead', async () => {
     const f = mockFetch([[FX, () => notFound()]]);
-    const r = await check(buildTarget('@gone'), deps(f, { probes: [xProbe] }));
+    const r = await check(buildTarget('@gone_example'), deps(f, { probes: [xProbe] }));
     expect(r.report.signals[0]!.confirmation?.outcome).toBe('confirmed');
     expect(r.report.verdict.verdict).toBe('DEAD');
     expect(r.stats.confirmed).toBe(1);
@@ -41,14 +41,14 @@ describe('serial re-confirmation of negatives', () => {
 
   it('re-confirmation bypasses the cache', async () => {
     const f = mockFetch([[FX, () => notFound()]]);
-    await check(buildTarget('@gone'), deps(f, { probes: [xProbe] }));
+    await check(buildTarget('@gone_example'), deps(f, { probes: [xProbe] }));
     expect(f.calls.length).toBe(2);
   });
 
   it('a negative whose re-check keeps erroring is downgraded to UNKNOWN, never dead', async () => {
     let n = 0;
     const f = mockFetch([[FX, () => (n++ === 0 ? notFound() : json({}, 429))]]);
-    const r = await check(buildTarget('@jane'), deps(f, { probes: [xProbe] }));
+    const r = await check(buildTarget('@example_co'), deps(f, { probes: [xProbe] }));
     const p = r.report.signals[0]!;
     expect(p.state).toBe('unknown');
     expect(p.unknownReason).toBe('error');
@@ -65,7 +65,7 @@ describe('serial re-confirmation of negatives', () => {
       [FX, () => (n++ < 2 ? json({}, 429, { 'retry-after': '2' }) : liveUser())],
     ]);
     const r = await check(
-      buildTarget('@jane'),
+      buildTarget('@example_co'),
       deps(f, { probes: [xProbe], backoffMs: [100, 200, 400], sleep: async (ms) => void sleeps.push(ms) }),
     );
     expect(sleeps).toEqual([100, 2000]);
@@ -74,7 +74,7 @@ describe('serial re-confirmation of negatives', () => {
 
   it('an errored signal that never recovers stays unknown(error)', async () => {
     const f = mockFetch([[FX, () => json({}, 503)]]);
-    const r = await check(buildTarget('@jane'), deps(f, { probes: [xProbe] }));
+    const r = await check(buildTarget('@example_co'), deps(f, { probes: [xProbe] }));
     expect(r.report.signals[0]!.confirmation?.outcome).toBe('still-error');
     expect(r.stats.stillError).toBe(1);
     expect(f.calls.length).toBe(4);
@@ -82,7 +82,7 @@ describe('serial re-confirmation of negatives', () => {
 
   it('--no-confirm reports the raw parallel pass', async () => {
     const f = mockFetch([[FX, () => notFound()]]);
-    const r = await check(buildTarget('@gone'), deps(f, { probes: [xProbe] }), { noConfirm: true });
+    const r = await check(buildTarget('@gone_example'), deps(f, { probes: [xProbe] }), { noConfirm: true });
     expect(r.report.signals[0]!.confirmation).toBeUndefined();
     expect(f.calls.length).toBe(1);
   });
@@ -90,6 +90,7 @@ describe('serial re-confirmation of negatives', () => {
   it('a crashing probe is an error, not a negative', async () => {
     const boom = {
       id: 'github',
+      signals: ['github'] as const,
       applies: () => true,
       run: async () => {
         throw new Error('kaboom');

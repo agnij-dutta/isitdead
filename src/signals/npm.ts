@@ -15,6 +15,7 @@ export function npmUrl(pkg: string): string {
 
 export const npmProbe: Probe = {
   id: 'npm',
+  signals: ['npm'],
   applies: (t) => !!t.npm,
   async run(t, ctx) {
     const pkg = t.npm!;
