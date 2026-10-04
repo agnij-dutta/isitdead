@@ -15,7 +15,16 @@ export function serve(deps: EngineDeps, port: number) {
   const page = join(here, '..', 'web', 'index.html');
   let queue: Promise<unknown> = Promise.resolve();
 
+  // Only answer requests addressed to this machine by name. Without this, a
+  // web page using DNS rebinding could point its own hostname at 127.0.0.1
+  // and read results for internal hosts through the user's browser.
+  const allowedHosts = new Set([`localhost:${port}`, `127.0.0.1:${port}`, `[::1]:${port}`]);
+
   const server = createServer(async (req, res) => {
+    if (!allowedHosts.has(req.headers.host ?? '')) {
+      res.writeHead(421, { 'content-type': 'text/plain' }).end('misdirected request');
+      return;
+    }
     const url = new URL(req.url ?? '/', `http://localhost:${port}`);
     if (url.pathname === '/') {
       try {
