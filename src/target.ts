@@ -51,8 +51,15 @@ export function buildTarget(input: string, flags: TargetFlags = {}): Target {
     input,
     name: clean(flags.name) ?? parsed.name,
     domain: clean(flags.domain) ? hostOf(flags.domain!) : parsed.domain,
-    github: clean(flags.github)?.replace(/^.*github\.com\//i, '').replace(/\/.*$/, '') ?? parsed.github,
-    x: clean(flags.x)?.replace(/^.*(x|twitter)\.com\//i, '').replace(/^@/, '').replace(/\/.*$/, '') ?? parsed.x?.replace(/^@/, ''),
+    github:
+      clean(flags.github)
+        ?.replace(/^.*github\.com\//i, '')
+        .replace(/\/.*$/, '') ?? parsed.github,
+    x:
+      clean(flags.x)
+        ?.replace(/^.*(x|twitter)\.com\//i, '')
+        .replace(/^@/, '')
+        .replace(/\/.*$/, '') ?? parsed.x?.replace(/^@/, ''),
     npm: clean(flags.npm) ?? parsed.npm,
     ats: clean(flags.ats),
   };

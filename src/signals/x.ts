@@ -30,7 +30,10 @@ export function bioStaleness(bio: string): string | undefined {
     const m = bio.match(re);
     if (m) {
       const i = m.index ?? 0;
-      return bio.slice(Math.max(0, i - 10), i + m[0].length + 25).replace(/\s+/g, ' ').trim();
+      return bio
+        .slice(Math.max(0, i - 10), i + m[0].length + 25)
+        .replace(/\s+/g, ' ')
+        .trim();
     }
   }
   return undefined;
@@ -65,21 +68,44 @@ export const xProbe: Probe = {
     if (o.kind === 'error') return [fromApiError(ctx, 'x-profile', `X profile @${h}`, o, url)];
     // fxtwitter mirrors the status in a JSON "code" field; trust the HTTP status first.
     if (o.kind === 'absent' || body?.code === 404) {
-      return [dead(ctx, 'x-profile', 'gone', 0.7, `X account @${h} not found (deleted, renamed or suspended)`, { source: url, evidence: { status: r.ok ? r.status : undefined, message: body?.message } })];
+      return [
+        dead(ctx, 'x-profile', 'gone', 0.7, `X account @${h} not found (deleted, renamed or suspended)`, {
+          source: url,
+          evidence: { status: r.ok ? r.status : undefined, message: body?.message },
+        }),
+      ];
     }
     if (!body?.user) {
-      if (body?.code && body.code !== 200) return [errored(ctx, 'x-profile', `fxtwitter answered code ${body.code}: ${body.message ?? ''} (not counted as dead)`, { source: url })];
+      if (body?.code && body.code !== 200)
+        return [
+          errored(ctx, 'x-profile', `fxtwitter answered code ${body.code}: ${body.message ?? ''} (not counted as dead)`, { source: url }),
+        ];
       return [errored(ctx, 'x-profile', 'fxtwitter returned no user object (not counted as dead)', { source: url })];
     }
     const u = body.user;
     const bio = u.description ?? '';
     const stale = bioStaleness(bio);
-    const ev = { handle: u.screen_name, name: u.name, bio, followers: u.followers, tweets: u.statuses ?? u.tweets, joined: u.joined, protected: u.protected };
+    const ev = {
+      handle: u.screen_name,
+      name: u.name,
+      bio,
+      followers: u.followers,
+      tweets: u.statuses ?? u.tweets,
+      joined: u.joined,
+      protected: u.protected,
+    };
     const out: SignalResult[] = [];
     if (stale) {
-      out.push(dead(ctx, 'x-profile', 'stale', 0.6, `@${h} bio looks stale: "${stale}"`, { source: url, evidence: { ...ev, staleMatch: stale } }));
+      out.push(
+        dead(ctx, 'x-profile', 'stale', 0.6, `@${h} bio looks stale: "${stale}"`, { source: url, evidence: { ...ev, staleMatch: stale } }),
+      );
     } else {
-      out.push(alive(ctx, 'x-profile', 0.2, `@${h} exists (${u.followers ?? '?'} followers), bio has no staleness markers`, { source: url, evidence: ev }));
+      out.push(
+        alive(ctx, 'x-profile', 0.2, `@${h} exists (${u.followers ?? '?'} followers), bio has no staleness markers`, {
+          source: url,
+          evidence: ev,
+        }),
+      );
     }
 
     if (u.protected) {

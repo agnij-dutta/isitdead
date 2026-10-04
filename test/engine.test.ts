@@ -64,7 +64,10 @@ describe('serial re-confirmation of negatives', () => {
       [/statuses$/, () => statuses()],
       [FX, () => (n++ < 2 ? json({}, 429, { 'retry-after': '2' }) : liveUser())],
     ]);
-    const r = await check(buildTarget('@jane'), deps(f, { probes: [xProbe], backoffMs: [100, 200, 400], sleep: async (ms) => void sleeps.push(ms) }));
+    const r = await check(
+      buildTarget('@jane'),
+      deps(f, { probes: [xProbe], backoffMs: [100, 200, 400], sleep: async (ms) => void sleeps.push(ms) }),
+    );
     expect(sleeps).toEqual([100, 2000]);
     expect(r.report.signals[0]!.confirmation?.outcome).toBe('recovered');
   });
@@ -85,7 +88,13 @@ describe('serial re-confirmation of negatives', () => {
   });
 
   it('a crashing probe is an error, not a negative', async () => {
-    const boom = { id: 'github', applies: () => true, run: async () => { throw new Error('kaboom'); } };
+    const boom = {
+      id: 'github',
+      applies: () => true,
+      run: async () => {
+        throw new Error('kaboom');
+      },
+    };
     const f = mockFetch([]);
     const r = await check(buildTarget('github:x'), deps(f, { probes: [boom] }));
     expect(r.report.signals[0]!.state).toBe('unknown');

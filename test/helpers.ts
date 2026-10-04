@@ -25,8 +25,10 @@ export function mockFetch(routes: Array<[string | RegExp, Route]>): MockFetch {
     const hit = routes.find(([k]) => (typeof k === 'string' ? url.startsWith(k) : k.test(url)));
     if (!hit) throw new Error(`unmocked URL ${url}`);
     const r = await hit[1](url, init);
-    if (r === 'network-error') throw Object.assign(new TypeError('fetch failed'), { cause: { code: 'ECONNRESET', message: 'socket hang up' } });
-    if (r === 'refused') throw Object.assign(new TypeError('fetch failed'), { cause: { code: 'ECONNREFUSED', message: 'connect ECONNREFUSED' } });
+    if (r === 'network-error')
+      throw Object.assign(new TypeError('fetch failed'), { cause: { code: 'ECONNRESET', message: 'socket hang up' } });
+    if (r === 'refused')
+      throw Object.assign(new TypeError('fetch failed'), { cause: { code: 'ECONNREFUSED', message: 'connect ECONNREFUSED' } });
     if (r === 'timeout') {
       const e = new Error('aborted');
       e.name = 'AbortError';
@@ -60,7 +62,10 @@ export function client(fetch: MockFetch, cache = true): HttpClient {
   return new HttpClient({
     fetch,
     cache: cache ? new MemoryCache() : undefined,
-    limiter: new HostLimiter(() => ({ maxConcurrent: 100, minGapMs: 0 }), async () => {}),
+    limiter: new HostLimiter(
+      () => ({ maxConcurrent: 100, minGapMs: 0 }),
+      async () => {},
+    ),
   });
 }
 

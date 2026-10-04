@@ -18,7 +18,10 @@ export interface Cache {
 
 export class MemoryCache implements Cache {
   private m = new Map<string, CachedResponse>();
-  constructor(private ttlMs = 6 * 3600_000, private clock: () => number = Date.now) {}
+  constructor(
+    private ttlMs = 6 * 3600_000,
+    private clock: () => number = Date.now,
+  ) {}
   async get(key: string) {
     const v = this.m.get(key);
     if (!v) return undefined;

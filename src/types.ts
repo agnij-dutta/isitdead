@@ -18,17 +18,7 @@ export type DeadKind = 'gone' | 'stale';
 export type UnknownReason = 'error' | 'inconclusive';
 
 export type SignalName =
-  | 'dns'
-  | 'http'
-  | 'hosting'
-  | 'content'
-  | 'tls'
-  | 'github'
-  | 'npm'
-  | 'x-profile'
-  | 'x-activity'
-  | 'jobs'
-  | 'wayback';
+  'dns' | 'http' | 'hosting' | 'content' | 'tls' | 'github' | 'npm' | 'x-profile' | 'x-activity' | 'jobs' | 'wayback';
 
 export interface Confirmation {
   /** Number of serial re-check attempts made. */

@@ -18,13 +18,23 @@
     "build": "tsc -p tsconfig.json",
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "demo:flaky": "node dist/cli.js demo-flaky"
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "npm run lint && npm run format:check && npm run typecheck && npm test",
+    "demo:flaky": "node dist/cli.js demo-flaky",
+    "prepublishOnly": "npm run check && npm run build"
   },
   "license": "MIT",
   "private": true,
   "devDependencies": {
+    "@eslint/js": "^9.39.5",
     "@types/node": "^22.20.5",
+    "eslint": "^9.39.5",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.9.9",
     "typescript": "^5.9.3",
+    "typescript-eslint": "^8.71.0",
     "vitest": "^3.2.7"
   }
 }

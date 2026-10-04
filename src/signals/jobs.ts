@@ -36,11 +36,20 @@ export function slugCandidates(t: Target): { slugs: string[]; guessed: boolean }
   if (t.ats) return { slugs: [t.ats.toLowerCase()], guessed: false };
   const set = new Set<string>();
   if (t.name) {
-    const n = t.name.toLowerCase().replace(/\b(inc|llc|ltd|gmbh|ag|corp|labs)\.?$/i, '').trim();
+    const n = t.name
+      .toLowerCase()
+      .replace(/\b(inc|llc|ltd|gmbh|ag|corp|labs)\.?$/i, '')
+      .trim();
     set.add(n.replace(/[^a-z0-9]/g, ''));
     if (/\s/.test(n)) set.add(n.replace(/[^a-z0-9]+/g, '-'));
   }
-  if (t.domain) set.add(t.domain.replace(/^www\./, '').split('.')[0]!.toLowerCase());
+  if (t.domain)
+    set.add(
+      t.domain
+        .replace(/^www\./, '')
+        .split('.')[0]!
+        .toLowerCase(),
+    );
   return { slugs: [...set].filter((s) => s.length >= 2).slice(0, 2), guessed: true };
 }
 
@@ -82,15 +91,36 @@ export const jobsProbe: Probe = {
       const total = withJobs.reduce((s, x) => s + x.count, 0);
       const guessNote = guessed ? ` (slug "${f.slug}" guessed from the name; verify it is the same company)` : '';
       const capped = withJobs.some((x) => x.ats === 'lever' && x.count >= LEVER_LIMIT) ? '+' : '';
-      return [alive(ctx, 'jobs', guessed ? 0.8 : 1.0, `${total}${capped} open role(s) on ${withJobs.map((x) => `${x.ats}/${x.slug}`).join(', ')}${guessNote}`, { source: f.url, evidence: ev })];
+      return [
+        alive(
+          ctx,
+          'jobs',
+          guessed ? 0.8 : 1.0,
+          `${total}${capped} open role(s) on ${withJobs.map((x) => `${x.ats}/${x.slug}`).join(', ')}${guessNote}`,
+          { source: f.url, evidence: ev },
+        ),
+      ];
     }
     if (found.length) {
       const f = found[0]!;
-      return [dead(ctx, 'jobs', 'stale', 0.3, `job board exists on ${f.ats}/${f.slug} but has 0 open roles`, { source: f.url, evidence: ev })];
+      return [
+        dead(ctx, 'jobs', 'stale', 0.3, `job board exists on ${f.ats}/${f.slug} but has 0 open roles`, { source: f.url, evidence: ev }),
+      ];
     }
     if (errors.length) {
-      return [errored(ctx, 'jobs', `job board lookup errored on ${errors.map((e) => `${e.ats}/${e.slug} (${e.reason})`).join('; ')} (not counted as dead)`, { evidence: ev })];
+      return [
+        errored(
+          ctx,
+          'jobs',
+          `job board lookup errored on ${errors.map((e) => `${e.ats}/${e.slug} (${e.reason})`).join('; ')} (not counted as dead)`,
+          { evidence: ev },
+        ),
+      ];
     }
-    return [inconclusive(ctx, 'jobs', `no public Greenhouse/Ashby/Lever board for ${slugs.join(', ')} (absence of evidence, not counted)`, { evidence: ev })];
+    return [
+      inconclusive(ctx, 'jobs', `no public Greenhouse/Ashby/Lever board for ${slugs.join(', ')} (absence of evidence, not counted)`, {
+        evidence: ev,
+      }),
+    ];
   },
 };

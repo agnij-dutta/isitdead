@@ -53,7 +53,11 @@ export const tlsProbe: Probe = {
     const left = daysBetween(now, new Date(a.validTo));
     const ev = { ...a, daysLeft: left };
     if (left < 0) {
-      return [dead(ctx, 'tls', 'stale', 0.7, `TLS certificate expired ${-left} days ago (${a.validTo.slice(0, 10)}): nobody is renewing it`, { evidence: ev })];
+      return [
+        dead(ctx, 'tls', 'stale', 0.7, `TLS certificate expired ${-left} days ago (${a.validTo.slice(0, 10)}): nobody is renewing it`, {
+          evidence: ev,
+        }),
+      ];
     }
     if (a.authorizationError && /ALTNAME|Hostname|IP/i.test(a.authorizationError)) {
       return [dead(ctx, 'tls', 'stale', 0.4, `TLS certificate does not cover ${host} (${a.authorizationError})`, { evidence: ev })];

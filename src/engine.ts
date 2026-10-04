@@ -258,7 +258,8 @@ export async function batch(
     const per: ConfirmStats = Object.fromEntries(
       Object.entries(stats).map(([k, v]) => [k, v - (before as Record<string, number>)[k]!]),
     ) as unknown as ConfirmStats;
-    if (per.negatives || per.errors) options.onProgress?.(`confirmed ${d.target.input}: ${per.negatives} negative(s), ${per.flippedAlive} flipped`);
+    if (per.negatives || per.errors)
+      options.onProgress?.(`confirmed ${d.target.input}: ${per.negatives} negative(s), ${per.flippedAlive} flipped`);
     results.push({ report: report(d, signals, deps), stats: per, discoveryVerdict: decide(discoverySignals) });
   }
   const verdictsChanged = results.filter((r) => r.discoveryVerdict.verdict !== r.report.verdict.verdict).length;

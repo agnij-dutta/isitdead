@@ -123,7 +123,13 @@ describe('dns probe', () => {
 describe('tls probe', () => {
   const t = buildTarget('x.test');
   it('expired certificate is stale', async () => {
-    const tls = async () => ({ ok: true as const, validFrom: '2024-01-01T00:00:00Z', validTo: '2025-01-01T00:00:00Z', authorized: false, authorizationError: 'CERT_HAS_EXPIRED' });
+    const tls = async () => ({
+      ok: true as const,
+      validFrom: '2024-01-01T00:00:00Z',
+      validTo: '2025-01-01T00:00:00Z',
+      authorized: false,
+      authorizationError: 'CERT_HAS_EXPIRED',
+    });
     const rs = await tlsProbe.run(t, ctx(mockFetch([]), { tls }));
     expect(rs[0]!.state).toBe('dead');
     expect(rs[0]!.kind).toBe('stale');
@@ -148,7 +154,10 @@ describe('expired hosting page (real-world: theranos.com)', () => {
   });
 
   it('nothing on 443 is inconclusive, not an error', async () => {
-    const rs = await tlsProbe.run(buildTarget('x.test'), ctx(mockFetch([]), { tls: async () => ({ ok: false, code: 'ECONNREFUSED', message: '' }) }));
+    const rs = await tlsProbe.run(
+      buildTarget('x.test'),
+      ctx(mockFetch([]), { tls: async () => ({ ok: false, code: 'ECONNREFUSED', message: '' }) }),
+    );
     expect(rs[0]!.unknownReason).toBe('inconclusive');
   });
 });
@@ -166,7 +175,12 @@ describe('absorbed or shut down', () => {
   });
 
   it('shutdown words in body text alone do not count', async () => {
-    const f = mockFetch([['https://acme.test/', () => html(`<title>Acme</title><h1>Acme</h1><p>We help teams wind down legacy systems. Acme. ${LONG_TEXT}</p>`)]]);
+    const f = mockFetch([
+      [
+        'https://acme.test/',
+        () => html(`<title>Acme</title><h1>Acme</h1><p>We help teams wind down legacy systems. Acme. ${LONG_TEXT}</p>`),
+      ],
+    ]);
     const rs = await webProbe.run(buildTarget('acme.test'), ctx(f));
     expect(get(rs, 'content').state).toBe('alive');
   });

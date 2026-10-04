@@ -19,7 +19,11 @@ export const FINGERPRINTS: Fingerprint[] = [
     label: 'Vercel deployment paused/disabled',
     kind: 'suspended',
     headers: { 'x-vercel-error': /DEPLOYMENT_(DISABLED|PAUSED|BLOCKED)|PAYMENT_REQUIRED/i },
-    body: [/deployment_(disabled|paused|blocked)/, /this deployment (is|has been) (temporarily )?(paused|disabled)/, /402: payment_required/],
+    body: [
+      /deployment_(disabled|paused|blocked)/,
+      /this deployment (is|has been) (temporarily )?(paused|disabled)/,
+      /402: payment_required/,
+    ],
   },
   {
     id: 'vercel-not-found',
@@ -82,7 +86,11 @@ export const FINGERPRINTS: Fingerprint[] = [
     label: 'DNS/hosting provider expiry page',
     kind: 'suspended',
     // e.g. theranos.com serves "Expired DNS Hosting Services | DNS Made Easy"
-    body: [/expired dns hosting services/, /dns (hosting )?(service|account) (has )?expired/, /this (dns|hosting) (account|plan) has expired/],
+    body: [
+      /expired dns hosting services/,
+      /dns (hosting )?(service|account) (has )?expired/,
+      /this (dns|hosting) (account|plan) has expired/,
+    ],
   },
   {
     id: 'parked',
@@ -139,7 +147,8 @@ export function detectHostingPage(status: number, headers: Record<string, string
 }
 
 /** Generic company suffixes stripped when matching names on a page. */
-const SUFFIXES = /\b(inc|inc\.|llc|ltd|ltd\.|gmbh|ag|sa|sarl|bv|oy|ab|plc|corp|corporation|co|company|labs|protocol|technologies|technology|hq|app|io)\.?$/i;
+const SUFFIXES =
+  /\b(inc|inc\.|llc|ltd|ltd\.|gmbh|ag|sa|sarl|bv|oy|ab|plc|corp|corporation|co|company|labs|protocol|technologies|technology|hq|app|io)\.?$/i;
 
 export function nameVariants(name: string): string[] {
   const base = name.trim().toLowerCase().replace(/\s+/g, ' ');
@@ -158,7 +167,13 @@ export function nameVariants(name: string): string[] {
 
 export function extractTitle(html: string): string | undefined {
   const m = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
-  return m?.[1] ? decodeEntities(m[1]).replace(/[\u2013\u2014]/g, '-').replace(/\s+/g, ' ').trim().slice(0, 200) || undefined : undefined;
+  return m?.[1]
+    ? decodeEntities(m[1])
+        .replace(/[\u2013\u2014]/g, '-')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .slice(0, 200) || undefined
+    : undefined;
 }
 
 const NAMED: Record<string, string> = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', ndash: '-', mdash: '-', middot: '.' };

@@ -32,7 +32,12 @@ export const npmProbe: Probe = {
     const days = modified ? daysBetween(new Date(modified), ctx.now()) : undefined;
     const ev = { latest, deprecated, modified, daysSinceModified: days, versionCount: Object.keys(doc.versions ?? {}).length };
     if (deprecated) {
-      return [dead(ctx, 'npm', 'gone', 1.0, `${pkg}@${latest} is deprecated: "${String(deprecated).slice(0, 140)}"`, { source: url, evidence: ev })];
+      return [
+        dead(ctx, 'npm', 'gone', 1.0, `${pkg}@${latest} is deprecated: "${String(deprecated).slice(0, 140)}"`, {
+          source: url,
+          evidence: ev,
+        }),
+      ];
     }
     if (days === undefined) return [inconclusive(ctx, 'npm', `${pkg}@${latest}: no modified date`, { source: url, evidence: ev })];
     const line = `${pkg}@${latest}, registry last updated ${humanAge(days)}`;

@@ -44,7 +44,12 @@ const COLUMNS = ['input', 'name', 'domain', 'github', 'x', 'npm', 'ats'] as cons
 export function targetsFromCsv(text: string): Target[] {
   const rows = parseCsv(text);
   if (!rows.length) return [];
-  const header = rows[0]!.map((h) => h.trim().toLowerCase().replace(/^twitter$/, 'x'));
+  const header = rows[0]!.map((h) =>
+    h
+      .trim()
+      .toLowerCase()
+      .replace(/^twitter$/, 'x'),
+  );
   const known = header.some((h) => (COLUMNS as readonly string[]).includes(h));
   const body = known ? rows.slice(1) : rows;
   return body.map((r) => {

@@ -33,7 +33,9 @@ export function formatCheck(r: CheckResult): string {
   const { report, stats, discoveryVerdict } = r;
   const v = report.verdict;
   const lines: string[] = [];
-  lines.push(`${c('1', describeTarget(report.target))}  ${c(VERDICT_COLOR[v.verdict], v.verdict)}  confidence ${Math.round(v.confidence * 100)}%`);
+  lines.push(
+    `${c('1', describeTarget(report.target))}  ${c(VERDICT_COLOR[v.verdict], v.verdict)}  confidence ${Math.round(v.confidence * 100)}%`,
+  );
   lines.push('');
   lines.push('Why:');
   for (const w of v.why) lines.push(`  ${w}`);
@@ -75,12 +77,16 @@ export function formatBatch(b: BatchResult): string {
   lines.push(`${'TARGET'.padEnd(w)}  VERDICT  CONF  TOP REASON`);
   for (const r of rows) {
     const name = r.name.length > w ? r.name.slice(0, w - 1) + '~' : r.name;
-    lines.push(`${name.padEnd(w)}  ${c(VERDICT_COLOR[r.verdict as VerdictLabel], r.verdict.padEnd(7))}  ${r.conf.padStart(4)}  ${r.top.slice(0, 140)}`);
+    lines.push(
+      `${name.padEnd(w)}  ${c(VERDICT_COLOR[r.verdict as VerdictLabel], r.verdict.padEnd(7))}  ${r.conf.padStart(4)}  ${r.top.slice(0, 140)}`,
+    );
   }
   const s = b.stats;
   lines.push('');
   lines.push(c('1', 'Error vs absence report'));
-  lines.push(`  Discovery: ${b.results.length} targets at concurrency ${b.concurrency}, ${b.requests} network requests (cache hits excluded)`);
+  lines.push(
+    `  Discovery: ${b.results.length} targets at concurrency ${b.concurrency}, ${b.requests} network requests (cache hits excluded)`,
+  );
   lines.push(`  Negatives in the parallel pass: ${s.negatives}`);
   lines.push(`    confirmed dead on serial re-check:   ${s.confirmed}`);
   lines.push(`    ${c('35', `flipped to alive on serial re-check:  ${s.flippedAlive}`)}`);

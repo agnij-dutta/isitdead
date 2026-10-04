@@ -65,7 +65,13 @@ export function inconclusive(ctx: Ctx, signal: SignalName, summary: string, b: B
   };
 }
 
-export function fromApiError(ctx: Ctx, signal: SignalName, what: string, o: Extract<ApiOutcome, { kind: 'error' }>, source: string): SignalResult {
+export function fromApiError(
+  ctx: Ctx,
+  signal: SignalName,
+  what: string,
+  o: Extract<ApiOutcome, { kind: 'error' }>,
+  source: string,
+): SignalResult {
   return errored(ctx, signal, `${what}: ${o.reason} (not counted as dead)`, {
     source,
     evidence: { status: o.status, error: o.reason, retryAfterSec: o.retryAfterSec },

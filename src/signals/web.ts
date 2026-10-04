@@ -17,7 +17,10 @@ const FALLBACK_TO_HTTP = new Set([
 
 /** Crude registrable domain: good enough to tell "moved to another site". */
 export function siteOf(host: string): string {
-  const parts = host.toLowerCase().replace(/^www\./, '').split('.');
+  const parts = host
+    .toLowerCase()
+    .replace(/^www\./, '')
+    .split('.');
   const twoLevel = /^(co|com|net|org|gov|ac|edu)$/.test(parts[parts.length - 2] ?? '') && (parts[parts.length - 1] ?? '').length === 2;
   return parts.slice(twoLevel ? -3 : -2).join('.');
 }
@@ -53,7 +56,9 @@ export const webProbe: Probe = {
       } else if (r.code === 'ENOTFOUND') {
         out.push(inconclusive(ctx, 'http', `${domain} did not resolve during fetch (see dns signal)`, { source, evidence: ev }));
       } else {
-        out.push(errored(ctx, 'http', `fetching ${domain} failed: ${r.code ?? ''} ${r.error} (not counted as dead)`, { source, evidence: ev }));
+        out.push(
+          errored(ctx, 'http', `fetching ${domain} failed: ${r.code ?? ''} ${r.error} (not counted as dead)`, { source, evidence: ev }),
+        );
       }
       out.push(inconclusive(ctx, 'hosting', 'no page fetched, hosting check skipped', { source }));
       out.push(inconclusive(ctx, 'content', 'no page fetched, content check skipped', { source }));
@@ -75,16 +80,29 @@ export const webProbe: Probe = {
       out.push(dead(ctx, 'http', 'gone', 0.3, `no site of its own: ${domain} redirects to ${movedSite}`, { source, evidence: ev }));
     } else if (s >= 200 && s < 300) out.push(alive(ctx, 'http', 0.2, `HTTP ${s}${redirectNote}`, { source, evidence: ev }));
     else if (s === 402) out.push(dead(ctx, 'http', 'gone', 0.3, `HTTP 402${redirectNote}`, { source, evidence: ev }));
-    else if (s === 404 || s === 410) out.push(dead(ctx, 'http', 'gone', 0.5, `homepage returns HTTP ${s}${redirectNote}`, { source, evidence: ev }));
-    else if (s === 401 || s === 403) out.push(inconclusive(ctx, 'http', `HTTP ${s}: blocked or behind a bot wall, cannot judge`, { source, evidence: ev }));
-    else if (s === 429 || s >= 500) out.push(errored(ctx, 'http', `HTTP ${s} from ${finalHost} (not counted as dead)`, { source, evidence: ev }));
+    else if (s === 404 || s === 410)
+      out.push(dead(ctx, 'http', 'gone', 0.5, `homepage returns HTTP ${s}${redirectNote}`, { source, evidence: ev }));
+    else if (s === 401 || s === 403)
+      out.push(inconclusive(ctx, 'http', `HTTP ${s}: blocked or behind a bot wall, cannot judge`, { source, evidence: ev }));
+    else if (s === 429 || s >= 500)
+      out.push(errored(ctx, 'http', `HTTP ${s} from ${finalHost} (not counted as dead)`, { source, evidence: ev }));
     else out.push(inconclusive(ctx, 'http', `HTTP ${s}${redirectNote}`, { source, evidence: ev }));
 
     // hosting
     const hit = detectHostingPage(s, r.headers, r.body);
     if (hit) {
-      const what = hit.kind === 'parked' ? 'domain is parked or for sale' : hit.kind === 'missing' ? 'host says the site no longer exists' : 'host has suspended the site';
-      out.push(dead(ctx, 'hosting', 'gone', 1.0, `${hit.label}: ${what} (matched "${hit.matched}")`, { source: r.url, evidence: { ...hit, status: s } }));
+      const what =
+        hit.kind === 'parked'
+          ? 'domain is parked or for sale'
+          : hit.kind === 'missing'
+            ? 'host says the site no longer exists'
+            : 'host has suspended the site';
+      out.push(
+        dead(ctx, 'hosting', 'gone', 1.0, `${hit.label}: ${what} (matched "${hit.matched}")`, {
+          source: r.url,
+          evidence: { ...hit, status: s },
+        }),
+      );
     } else if (s >= 200 && s < 300) {
       out.push(alive(ctx, 'hosting', movedSite ? 0 : 0.1, 'no suspended, parked or missing-site markers', { source: r.url }));
     } else {
@@ -107,7 +125,8 @@ export const webProbe: Probe = {
 };
 
 /** Title or first heading announcing the end. Only these spots, never body text. */
-const SHUTDOWN = /\b(sunsetting|sunset|shutting down|shut down|shutdown|farewell|goodbye|end of life|end-of-life|discontinued|winding down|wind down|closing down|has closed|(is|are) closing|ceased operations|thank you for everything)\b/i;
+const SHUTDOWN =
+  /\b(sunsetting|sunset|shutting down|shut down|shutdown|farewell|goodbye|end of life|end-of-life|discontinued|winding down|wind down|closing down|has closed|(is|are) closing|ceased operations|thank you for everything)\b/i;
 
 export function shutdownNotice(html: string): string | undefined {
   const spots = [
@@ -135,12 +154,24 @@ function contentSignal(t: Target, ctx: Ctx, html: string, ignoreHosts: string[],
     return alive(ctx, 'content', 0.3, `page mentions "${m.variant}"${title ? ` (title: "${title}")` : ''}`, { source: url, evidence: ev });
   }
   if (text.length < 400) {
-    return inconclusive(ctx, 'content', `page is too thin to judge (${text.length} chars of text, likely JS-rendered); "${name}" not found`, { source: url, evidence: ev });
+    return inconclusive(
+      ctx,
+      'content',
+      `page is too thin to judge (${text.length} chars of text, likely JS-rendered); "${name}" not found`,
+      { source: url, evidence: ev },
+    );
   }
-  return dead(ctx, 'content', 'gone', 0.8, `page no longer mentions "${name}"${title ? `; title is "${title}"` : ''}: domain may now belong to someone else`, {
-    source: url,
-    evidence: ev,
-  });
+  return dead(
+    ctx,
+    'content',
+    'gone',
+    0.8,
+    `page no longer mentions "${name}"${title ? `; title is "${title}"` : ''}: domain may now belong to someone else`,
+    {
+      source: url,
+      evidence: ev,
+    },
+  );
 }
 
 function safeHost(u: string): string | undefined {

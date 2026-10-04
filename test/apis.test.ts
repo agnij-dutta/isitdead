@@ -56,7 +56,9 @@ describe('github', () => {
   });
 
   it('rate limit (403, remaining 0) is UNKNOWN, never dead', async () => {
-    const f = mockFetch([[GH, () => json({ message: 'API rate limit exceeded' }, 403, { 'x-ratelimit-remaining': '0', 'x-ratelimit-reset': '1791097880' })]]);
+    const f = mockFetch([
+      [GH, () => json({ message: 'API rate limit exceeded' }, 403, { 'x-ratelimit-remaining': '0', 'x-ratelimit-reset': '1791097880' })],
+    ]);
     const [r] = await githubProbe.run(t, ctx(f));
     expect(r!.state).toBe('unknown');
     expect(r!.unknownReason).toBe('error');
@@ -72,7 +74,12 @@ describe('github', () => {
 
 describe('npm', () => {
   const t = buildTarget('npm:left-pad');
-  const doc = (deprecated?: string, modified = daysAgo(10)) => ({ name: 'left-pad', modified, 'dist-tags': { latest: '1.3.0' }, versions: { '1.3.0': { deprecated } } });
+  const doc = (deprecated?: string, modified = daysAgo(10)) => ({
+    name: 'left-pad',
+    modified,
+    'dist-tags': { latest: '1.3.0' },
+    versions: { '1.3.0': { deprecated } },
+  });
   it('deprecated latest is gone', async () => {
     const f = mockFetch([['https://registry.npmjs.org/', () => json(doc('use String.prototype.padStart()'))]]);
     const [r] = await npmProbe.run(t, ctx(f));
@@ -150,14 +157,23 @@ describe('x via fxtwitter', () => {
   });
 
   it('last tweet over a year ago is stale; recent is alive', async () => {
-    const old = mockFetch([[/statuses$/, () => statuses(500)], [FX, () => user('building')]]);
-    const fresh = mockFetch([[/statuses$/, () => statuses(2)], [FX, () => user('building')]]);
+    const old = mockFetch([
+      [/statuses$/, () => statuses(500)],
+      [FX, () => user('building')],
+    ]);
+    const fresh = mockFetch([
+      [/statuses$/, () => statuses(2)],
+      [FX, () => user('building')],
+    ]);
     expect((await xProbe.run(buildTarget('@jane'), ctx(old))).find((r) => r.signal === 'x-activity')!.state).toBe('dead');
     expect((await xProbe.run(buildTarget('@jane'), ctx(fresh))).find((r) => r.signal === 'x-activity')!.state).toBe('alive');
   });
 
   it('timeline error does not poison the profile signal', async () => {
-    const f = mockFetch([[/statuses$/, () => json({}, 500)], [FX, () => user('building')]]);
+    const f = mockFetch([
+      [/statuses$/, () => json({}, 500)],
+      [FX, () => user('building')],
+    ]);
     const rs = await xProbe.run(buildTarget('@jane'), ctx(f));
     expect(rs.find((r) => r.signal === 'x-profile')!.state).toBe('alive');
     expect(rs.find((r) => r.signal === 'x-activity')!.unknownReason).toBe('error');
@@ -198,7 +214,10 @@ describe('jobs (Greenhouse / Ashby / Lever)', () => {
   });
 
   it('existing board with zero roles is weakly stale', async () => {
-    const f = mockFetch([[GHB, () => json({ jobs: [] })], [/./, () => json({}, 404)]]);
+    const f = mockFetch([
+      [GHB, () => json({ jobs: [] })],
+      [/./, () => json({}, 404)],
+    ]);
     const [r] = await jobsProbe.run(buildTarget('acme.test'), ctx(f));
     expect(r!.state).toBe('dead');
     expect(r!.kind).toBe('stale');
@@ -214,7 +233,17 @@ describe('jobs (Greenhouse / Ashby / Lever)', () => {
 
 describe('wayback', () => {
   it('old last capture is stale, only when enabled', async () => {
-    const f = mockFetch([['https://web.archive.org/', () => json([['timestamp', 'statuscode', 'digest'], ['20210101000000', '200', 'A'], ['20220301120000', '200', 'B']])]]);
+    const f = mockFetch([
+      [
+        'https://web.archive.org/',
+        () =>
+          json([
+            ['timestamp', 'statuscode', 'digest'],
+            ['20210101000000', '200', 'A'],
+            ['20220301120000', '200', 'B'],
+          ]),
+      ],
+    ]);
     const t = buildTarget('old.test');
     expect(waybackProbe.applies(t, {})).toBe(false);
     const [r] = await waybackProbe.run(t, ctx(f, { options: { wayback: true } }));

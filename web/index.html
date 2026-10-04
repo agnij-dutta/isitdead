@@ -1,68 +1,176 @@
 <!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Is it dead?</title>
-<style>
-  :root { color-scheme: dark; --bg:#0d0d0f; --fg:#e8e8ea; --dim:#8a8a93; --alive:#4ade80; --dead:#f87171; --dormant:#fbbf24; --unknown:#9ca3af; }
-  * { box-sizing: border-box; }
-  body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; }
-  main { max-width: 820px; margin: 0 auto; padding: 48px 20px; }
-  h1 { font-size: 28px; margin: 0 0 4px; }
-  p.sub { color: var(--dim); margin: 0 0 28px; }
-  form { display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-  input { background:#17171b; border:1px solid #2a2a31; color:var(--fg); padding:10px 12px; border-radius:6px; font:inherit; }
-  input#q { grid-column: 1 / -1; font-size: 17px; }
-  button { grid-column: 1 / -1; background:var(--fg); color:var(--bg); border:0; padding:11px; border-radius:6px; font:inherit; font-weight:700; cursor:pointer; }
-  button:disabled { opacity:.5; cursor:wait; }
-  #out { margin-top: 32px; }
-  .verdict { font-size: 40px; font-weight: 800; letter-spacing: .02em; }
-  .ALIVE { color: var(--alive); } .DEAD { color: var(--dead); } .DORMANT { color: var(--dormant); } .UNKNOWN { color: var(--unknown); }
-  ul { padding-left: 18px; } li { margin: 4px 0; }
-  table { width:100%; border-collapse: collapse; margin-top: 16px; font-size: 13px; }
-  td { border-top: 1px solid #222; padding: 6px 8px 6px 0; vertical-align: top; }
-  td.s { white-space: nowrap; font-weight: 700; }
-  .alive { color: var(--alive); } .dead { color: var(--dead); } .unknown { color: var(--unknown); }
-  .flip { color: #c084fc; }
-  small { color: var(--dim); }
-</style>
-</head>
-<body>
-<main>
-  <h1>Is it dead?</h1>
-  <p class="sub">Domain, GitHub org, X handle or name. Evidence from public endpoints. Errors are never counted as "dead".</p>
-  <form id="f">
-    <input id="q" name="q" placeholder="stripe.com" autofocus>
-    <input name="github" placeholder="GitHub org (optional)">
-    <input name="x" placeholder="X handle (optional)">
-    <input name="npm" placeholder="npm package (optional)">
-    <button id="go">Check</button>
-  </form>
-  <div id="out"></div>
-</main>
-<script>
-const f = document.getElementById('f'), out = document.getElementById('out'), go = document.getElementById('go');
-const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
-f.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const params = new URLSearchParams([...new FormData(f)].filter(([, v]) => v));
-  go.disabled = true; out.innerHTML = '<small>checking, negatives get re-confirmed serially, this can take a few seconds...</small>';
-  try {
-    const r = await (await fetch('/api/check?' + params)).json();
-    if (r.error) throw new Error(r.error);
-    const v = r.verdict;
-    const c = r.confirmation;
-    out.innerHTML = `
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Is it dead?</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0d0d0f;
+        --fg: #e8e8ea;
+        --dim: #8a8a93;
+        --alive: #4ade80;
+        --dead: #f87171;
+        --dormant: #fbbf24;
+        --unknown: #9ca3af;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font:
+          15px/1.5 ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          monospace;
+      }
+      main {
+        max-width: 820px;
+        margin: 0 auto;
+        padding: 48px 20px;
+      }
+      h1 {
+        font-size: 28px;
+        margin: 0 0 4px;
+      }
+      p.sub {
+        color: var(--dim);
+        margin: 0 0 28px;
+      }
+      form {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 8px;
+      }
+      input {
+        background: #17171b;
+        border: 1px solid #2a2a31;
+        color: var(--fg);
+        padding: 10px 12px;
+        border-radius: 6px;
+        font: inherit;
+      }
+      input#q {
+        grid-column: 1 / -1;
+        font-size: 17px;
+      }
+      button {
+        grid-column: 1 / -1;
+        background: var(--fg);
+        color: var(--bg);
+        border: 0;
+        padding: 11px;
+        border-radius: 6px;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      button:disabled {
+        opacity: 0.5;
+        cursor: wait;
+      }
+      #out {
+        margin-top: 32px;
+      }
+      .verdict {
+        font-size: 40px;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+      }
+      .ALIVE {
+        color: var(--alive);
+      }
+      .DEAD {
+        color: var(--dead);
+      }
+      .DORMANT {
+        color: var(--dormant);
+      }
+      .UNKNOWN {
+        color: var(--unknown);
+      }
+      ul {
+        padding-left: 18px;
+      }
+      li {
+        margin: 4px 0;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 16px;
+        font-size: 13px;
+      }
+      td {
+        border-top: 1px solid #222;
+        padding: 6px 8px 6px 0;
+        vertical-align: top;
+      }
+      td.s {
+        white-space: nowrap;
+        font-weight: 700;
+      }
+      .alive {
+        color: var(--alive);
+      }
+      .dead {
+        color: var(--dead);
+      }
+      .unknown {
+        color: var(--unknown);
+      }
+      .flip {
+        color: #c084fc;
+      }
+      small {
+        color: var(--dim);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Is it dead?</h1>
+      <p class="sub">Domain, GitHub org, X handle or name. Evidence from public endpoints. Errors are never counted as "dead".</p>
+      <form id="f">
+        <input id="q" name="q" placeholder="stripe.com" autofocus />
+        <input name="github" placeholder="GitHub org (optional)" />
+        <input name="x" placeholder="X handle (optional)" />
+        <input name="npm" placeholder="npm package (optional)" />
+        <button id="go">Check</button>
+      </form>
+      <div id="out"></div>
+    </main>
+    <script>
+      const f = document.getElementById('f'),
+        out = document.getElementById('out'),
+        go = document.getElementById('go');
+      const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+      f.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const params = new URLSearchParams([...new FormData(f)].filter(([, v]) => v));
+        go.disabled = true;
+        out.innerHTML = '<small>checking, negatives get re-confirmed serially, this can take a few seconds...</small>';
+        try {
+          const r = await (await fetch('/api/check?' + params)).json();
+          if (r.error) throw new Error(r.error);
+          const v = r.verdict;
+          const c = r.confirmation;
+          out.innerHTML = `
       <div class="verdict ${v.verdict}">${v.verdict}</div>
       <small>confidence ${Math.round(v.confidence * 100)}%</small>
       <ul>${v.why.map((w) => `<li>${esc(w)}</li>`).join('')}</ul>
       ${c.negatives ? `<p class="flip">${c.negatives} negative(s) re-checked serially: ${c.confirmed} confirmed, ${c.flippedAlive} flipped to alive, ${c.unconfirmed} downgraded to unknown.</p>` : ''}
       <table>${r.signals.map((s) => `<tr><td class="s ${s.state}">${s.state === 'dead' ? (s.kind === 'stale' ? 'STALE' : 'DEAD') : s.state === 'unknown' ? (s.unknownReason === 'error' ? 'ERROR' : 'UNCLEAR') : 'ALIVE'}</td><td>${esc(s.signal)}</td><td>${esc(s.summary)}<br><small>${esc(s.source ?? '')} @ ${esc(s.checkedAt)}</small></td></tr>`).join('')}</table>`;
-  } catch (err) {
-    out.innerHTML = `<p class="dead">${esc(err.message)}</p>`;
-  } finally { go.disabled = false; }
-});
-</script>
-</body>
+        } catch (err) {
+          out.innerHTML = `<p class="dead">${esc(err.message)}</p>`;
+        } finally {
+          go.disabled = false;
+        }
+      });
+    </script>
+  </body>
 </html>

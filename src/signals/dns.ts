@@ -1,9 +1,7 @@
 import { Resolver } from 'node:dns/promises';
 import { alive, dead, errored, type Probe } from '../context.js';
 
-export type DnsAnswer =
-  | { ok: true; addresses: string[]; cname?: string[] }
-  | { ok: false; code: string; message: string };
+export type DnsAnswer = { ok: true; addresses: string[]; cname?: string[] } | { ok: false; code: string; message: string };
 
 export type DnsResolver = (host: string) => Promise<DnsAnswer>;
 
@@ -49,6 +47,10 @@ export const dnsProbe: Probe = {
     if (ans.code === 'ENODATA') {
       return [dead(ctx, 'dns', 'gone', 0.7, `${host} exists but has no A/AAAA/CNAME records`, { evidence: { code: ans.code } })];
     }
-    return [errored(ctx, 'dns', `DNS lookup for ${host} failed: ${ans.code} (not counted as dead)`, { evidence: { code: ans.code, message: ans.message } })];
+    return [
+      errored(ctx, 'dns', `DNS lookup for ${host} failed: ${ans.code} (not counted as dead)`, {
+        evidence: { code: ans.code, message: ans.message },
+      }),
+    ];
   },
 };
