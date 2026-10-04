@@ -21,7 +21,7 @@ Real output, captured 2026-10-04 (full run with every signal and source in [`exa
 
 Directory pages, Crunchbase profiles and old press keep saying "live" long after a company is gone, so isitdead checks things that are hard to fake: is the domain parked or suspended, does the homepage still name the company, when was original code last pushed, is anyone hiring.
 
-The harder problem is the checker lying to you. Public APIs rate-limit under concurrency, and some answer a rate limit with something that looks exactly like "user not found". A bulk sweep then reports live accounts as dead. isitdead is built around one rule: **an error is never an absence**. Errors become `unknown`, and every negative from the fast parallel pass is re-checked one at a time, with backoff, bypassing the cache, before it is allowed to count.
+The harder problem is the checker lying to you. Public APIs rate-limit under concurrency, and some answer a rate limit with something that looks exactly like "user not found". A bulk sweep then reports live accounts as dead. This tool exists because that happened: a 6-thread sweep of 110 X bios flagged 20 accounts as gone, and re-checking those 20 one at a time found 15 of them alive. A 75% false-positive rate, from a checker that never threw an error. isitdead is built around one rule: **an error is never an absence**. Errors become `unknown`, and every negative from the fast parallel pass is re-checked one at a time, with backoff, bypassing the cache, before it is allowed to count.
 
 ## Quickstart
 
