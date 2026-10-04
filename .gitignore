@@ -1,4 +1,22 @@
-node_modules
-dist
-.cache
+# dependencies and build output
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# local cache, logs and run output
+.cache/
 *.log
+results.json
+
+# env files and keys (none are needed, keep it that way)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
