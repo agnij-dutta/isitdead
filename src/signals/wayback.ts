@@ -1,4 +1,4 @@
-import { alive, daysBetween, dead, fromApiError, humanAge, inconclusive, type Probe } from '../context.js';
+import { daysBetween, dead, fromApiError, humanAge, inconclusive, type Probe } from '../context.js';
 import { classifyApi, safeJson } from '../http.js';
 
 function parseTs(ts: string): Date {
@@ -26,8 +26,9 @@ export const waybackProbe: Probe = {
     const days = daysBetween(when, ctx.now());
     const ev = { lastChangedCapture: when.toISOString(), daysSince: days, rows: data };
     const line = `Wayback: last capture with changed content ${humanAge(days)} (${when.toISOString().slice(0, 10)})`;
-    if (days <= 120) return [alive(ctx, 'wayback', 0.2, line, { source: url, evidence: ev })];
-    if (days <= 730) return [inconclusive(ctx, 'wayback', line, { source: url, evidence: ev })];
+    // Recent captures prove little: the archive happily captures parked and
+    // expired-host pages. Only a long-frozen site is evidence.
+    if (days <= 730) return [inconclusive(ctx, 'wayback', `${line} (recent captures are not proof of life)`, { source: url, evidence: ev })];
     return [dead(ctx, 'wayback', 'stale', 0.4, line, { source: url, evidence: ev })];
   },
 };

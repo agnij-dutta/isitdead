@@ -78,6 +78,7 @@ export function daysBetween(a: Date, b: Date): number {
 
 export function humanAge(days: number): string {
   if (days < 1) return 'today';
+  if (days === 1) return '1 day ago';
   if (days < 60) return `${days} days ago`;
   if (days < 730) return `${Math.round(days / 30.4)} months ago`;
   return `${(days / 365.25).toFixed(1)} years ago`;

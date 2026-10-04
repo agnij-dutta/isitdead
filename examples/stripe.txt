@@ -1,0 +1,29 @@
+Stripe (stripe.com, github:stripe, @stripe)  ALIVE  confidence 97%
+
+Why:
+  + github: last push to an original repo today (ai); 6 archived
+  + jobs: 716 open role(s) on greenhouse/stripe (slug "stripe" guessed from the name; verify it is the same company)
+  + x-activity: last tweet 3 days ago (2026-09-30)
+  + content: page mentions "stripe" (title: "Stripe | Financial Infrastructure to Grow Your Revenue")
+  + http: HTTP 200 after 1 redirect(s)
+  + tls: valid TLS certificate, 67 days left (issuer DigiCert, Inc.)
+
+Signals:
+  ALIVE   dns         stripe.com resolves (198.202.176.41, 198.137.150.41)
+                      @ 2026-10-04T06:36:24.876Z
+  ALIVE   http        HTTP 200 after 1 redirect(s)
+                      https://stripe.com/  @ 2026-10-04T06:36:25.285Z
+  ALIVE   hosting     no suspended, parked or missing-site markers
+                      https://stripe.com/in  @ 2026-10-04T06:36:25.299Z
+  ALIVE   content     page mentions "stripe" (title: "Stripe | Financial Infrastructure to Grow Your Revenue")
+                      https://stripe.com/in  @ 2026-10-04T06:36:25.310Z
+  ALIVE   tls         valid TLS certificate, 67 days left (issuer DigiCert, Inc.)
+                      @ 2026-10-04T06:36:24.988Z
+  ALIVE   github      last push to an original repo today (ai); 6 archived
+                      https://api.github.com/users/stripe/repos?sort=pushed&direction=desc&per_page=100&type=owner  @ 2026-10-04T06:36:24.906Z
+  ALIVE   x-profile   @stripe exists (292906 followers), bio has no staleness markers
+                      https://api.fxtwitter.com/2/profile/stripe  @ 2026-10-04T06:36:24.880Z
+  ALIVE   x-activity  last tweet 3 days ago (2026-09-30)
+                      https://api.fxtwitter.com/2/profile/stripe/statuses  @ 2026-10-04T06:36:24.908Z
+  ALIVE   jobs        716 open role(s) on greenhouse/stripe (slug "stripe" guessed from the name; verify it is the same company)
+                      https://boards-api.greenhouse.io/v1/boards/stripe/jobs  @ 2026-10-04T06:36:24.889Z

@@ -43,7 +43,7 @@ export const webProbe: Probe = {
     const domain = t.domain!;
     const { r, attempts } = await fetchHome(domain, ctx);
     const chain = r.chain.map((h) => `${h.status} ${h.url}`);
-    const source = attempts[0];
+    const source = attempts[attempts.length - 1];
 
     if (!r.ok) {
       const ev = { error: r.error, code: r.code, attempts, chain };
@@ -69,7 +69,11 @@ export const webProbe: Probe = {
     const out: SignalResult[] = [];
 
     // http
-    if (s >= 200 && s < 300) out.push(alive(ctx, 'http', 0.2, `HTTP ${s}${redirectNote}`, { source, evidence: ev }));
+    if (s >= 200 && s < 300 && movedSite) {
+      // The domain no longer hosts its own site. Fine for a rebrand (the content
+      // check will find the name), a strong hint for an absorbed or sold company.
+      out.push(dead(ctx, 'http', 'gone', 0.3, `no site of its own: ${domain} redirects to ${movedSite}`, { source, evidence: ev }));
+    } else if (s >= 200 && s < 300) out.push(alive(ctx, 'http', 0.2, `HTTP ${s}${redirectNote}`, { source, evidence: ev }));
     else if (s === 402) out.push(dead(ctx, 'http', 'gone', 0.3, `HTTP 402${redirectNote}`, { source, evidence: ev }));
     else if (s === 404 || s === 410) out.push(dead(ctx, 'http', 'gone', 0.5, `homepage returns HTTP ${s}${redirectNote}`, { source, evidence: ev }));
     else if (s === 401 || s === 403) out.push(inconclusive(ctx, 'http', `HTTP ${s}: blocked or behind a bot wall, cannot judge`, { source, evidence: ev }));
@@ -82,7 +86,7 @@ export const webProbe: Probe = {
       const what = hit.kind === 'parked' ? 'domain is parked or for sale' : hit.kind === 'missing' ? 'host says the site no longer exists' : 'host has suspended the site';
       out.push(dead(ctx, 'hosting', 'gone', 1.0, `${hit.label}: ${what} (matched "${hit.matched}")`, { source: r.url, evidence: { ...hit, status: s } }));
     } else if (s >= 200 && s < 300) {
-      out.push(alive(ctx, 'hosting', 0.1, 'no suspended, parked or missing-site markers', { source: r.url }));
+      out.push(alive(ctx, 'hosting', movedSite ? 0 : 0.1, 'no suspended, parked or missing-site markers', { source: r.url }));
     } else {
       out.push(inconclusive(ctx, 'hosting', `no hosting markers on HTTP ${s} page`, { source: r.url }));
     }
@@ -102,8 +106,28 @@ export const webProbe: Probe = {
   },
 };
 
+/** Title or first heading announcing the end. Only these spots, never body text. */
+const SHUTDOWN = /\b(sunsetting|sunset|shutting down|shut down|shutdown|farewell|goodbye|end of life|end-of-life|discontinued|winding down|wind down|closing down|has closed|(is|are) closing|ceased operations|thank you for everything)\b/i;
+
+export function shutdownNotice(html: string): string | undefined {
+  const spots = [
+    html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1],
+    html.match(/<meta[^>]+property=["']og:title["'][^>]+content=["']([^"']*)["']/i)?.[1],
+    html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i)?.[1]?.replace(/<[^>]+>/g, ' '),
+  ];
+  for (const s of spots) {
+    const text = s?.replace(/\s+/g, ' ').trim();
+    if (text && SHUTDOWN.test(text)) return text.slice(0, 160);
+  }
+  return undefined;
+}
+
 function contentSignal(t: Target, ctx: Ctx, html: string, ignoreHosts: string[], url: string, title?: string): SignalResult {
   const name = t.name ?? t.domain!;
+  const notice = shutdownNotice(html);
+  if (notice) {
+    return dead(ctx, 'content', 'gone', 1.0, `page is a shutdown notice: "${notice}"`, { source: url, evidence: { name, title, notice } });
+  }
   const m = mentionsName(html, name, ignoreHosts);
   const text = visibleText(html);
   const ev = { name, nameDerived: !!t.nameDerived, title, textLength: text.length, matchedVariant: m.variant };

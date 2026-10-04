@@ -1,0 +1,24 @@
+TARGET                                            VERDICT  CONF  TOP REASON
+Stripe (stripe.com, github:stripe, @stripe)       ALIVE     97%  + github: last push to an original repo today (stripe-ios); 6 archived
+Linear (linear.app, github:linear, @linear)       ALIVE     97%  + github: last push to an original repo 2 days ago (linear-release-action); 4 archived
+Vercel (vercel.com, github:vercel, @vercel)       ALIVE     97%  + github: last push to an original repo today (ai)
+Supabase (supabase.com, github:supabase, @supab~  ALIVE     97%  + github: last push to an original repo today (cli); 6 archived
+Palantir (palantir.com, github:palantir, @Palan~  ALIVE     97%  + github: last push to an original repo today (go-compiles)
+Atom (atom.io, github:atom, @AtomEditor)          DEAD      84%  - content: page is a shutdown notice: "Sunsetting Atom - The GitHub Blog" [confirmed serially, 1 attempt(s)]
+request (github:request, npm:request)             DEAD      91%  - github: last push to an original repo 2.1 years ago (request) [confirmed serially, 1 attempt(s)]
+Theranos (theranos.com, @theranos)                DEAD      67%  - hosting: DNS/hosting provider expiry page: host has suspended the site (matched "expired dns hosting services") [confirmed serially, 1 att
+Sidewalk Labs (sidewalklabs.com, @sidewalklabs)   DEAD      70%  - content: page no longer mentions "Sidewalk Labs"; title is "Stay informed - Google Earth": domain may now belong to someone else [confirme
+Rdio (rdio.com, @rdio)                            DEAD      61%  - x-profile: X account @rdio not found (deleted, renamed or suspended) [confirmed serially, 1 attempt(s)]
+Quibi (quibi.com, @quibi)                         DORMANT   35%  - x-profile: @quibi bio looks stale: "We've moved! Please visit us at our" [confirmed serially, 1 attempt(s)]
+Fast (fast.co)                                    UNKNOWN   10%  + dns: fast.co resolves (3.33.139.32)
+Juicero (juicero.com, @juicero)                   ALIVE     75%  + content: page mentions "juicero" (title: "Juicero - Sparkling Water - Sparkling water that works as hard as you do.")
+
+Error vs absence report
+  Discovery: 13 targets at concurrency 6, 115 network requests (cache hits excluded)
+  Negatives in the parallel pass: 13
+    confirmed dead on serial re-check:   13
+    flipped to alive on serial re-check:  0
+    downgraded to unknown (re-check errored): 0
+  Parallel-pass false-negative rate: 0% of negatives did not survive confirmation
+  Errored signals retried: 3 (0 recovered, 3 still erroring, none counted as dead)
+  Verdicts changed by confirmation: 0 (0 would have been wrongly reported DEAD)

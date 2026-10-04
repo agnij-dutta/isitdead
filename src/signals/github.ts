@@ -54,7 +54,7 @@ export const githubProbe: Probe = {
     };
 
     if (archived.length === repos.length) {
-      return [dead(ctx, 'github', 'gone', 1.0, `all ${repos.length} public repos are archived (read-only): explicitly end-of-life`, { source: url, evidence })];
+      return [dead(ctx, 'github', 'gone', 1.0, `all ${repos.length}${repos.length === 100 ? "+" : ""} public repos are archived (read-only): explicitly end-of-life`, { source: url, evidence })];
     }
     if (liveOriginals.length === 0) {
       const age = topAny?.pushed_at ? humanAge(daysBetween(new Date(topAny.pushed_at), now)) : 'unknown';

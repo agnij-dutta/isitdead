@@ -63,3 +63,10 @@ describe('nameVariants', () => {
     expect(v).toContain('helvetia-advisory');
   });
 });
+
+describe('extractTitle', () => {
+  it('decodes entities and renders dashes as hyphens', async () => {
+    const { extractTitle } = await import('../src/patterns.js');
+    expect(extractTitle('<title>Juicero &#8211; Sparkling Water &amp; more</title>')).toBe('Juicero - Sparkling Water & more');
+  });
+});

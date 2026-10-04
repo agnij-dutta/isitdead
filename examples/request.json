@@ -1,0 +1,120 @@
+{
+  "target": {
+    "input": "npm:request",
+    "name": "request",
+    "github": "request",
+    "npm": "request",
+    "nameDerived": true
+  },
+  "verdict": {
+    "verdict": "DEAD",
+    "confidence": 0.91,
+    "why": [
+      "- github: last push to an original repo 2.1 years ago (request) [confirmed serially, 1 attempt(s)]",
+      "- npm: request@2.88.2 is deprecated: \"request has been deprecated, see https://github.com/request/request/issues/3142\" [confirmed serially, 1 attempt(s)]"
+    ],
+    "scores": {
+      "alive": 0,
+      "gone": 1,
+      "stale": 1,
+      "unknownErrors": 0
+    }
+  },
+  "signals": [
+    {
+      "signal": "github",
+      "state": "dead",
+      "kind": "stale",
+      "weight": 1,
+      "summary": "last push to an original repo 2.1 years ago (request)",
+      "evidence": {
+        "repoCount": 29,
+        "truncated": false,
+        "forks": 1,
+        "originals": 28,
+        "archived": 0,
+        "newestOriginal": {
+          "name": "request/request",
+          "pushedAt": "2024-08-14T00:09:41Z"
+        },
+        "newestAny": {
+          "name": "request/request",
+          "pushedAt": "2024-08-14T00:09:41Z",
+          "fork": false
+        },
+        "forkNames": [
+          "request/http-duplex-client"
+        ],
+        "daysSinceOriginalPush": 781
+      },
+      "source": "https://api.github.com/users/request/repos?sort=pushed&direction=desc&per_page=100&type=owner",
+      "checkedAt": "2026-10-04T06:37:02.292Z",
+      "confirmation": {
+        "attempts": 1,
+        "originalState": "dead",
+        "originalSummary": "last push to an original repo 2.1 years ago (request)",
+        "outcome": "confirmed"
+      }
+    },
+    {
+      "signal": "npm",
+      "state": "dead",
+      "kind": "gone",
+      "weight": 1,
+      "summary": "request@2.88.2 is deprecated: \"request has been deprecated, see https://github.com/request/request/issues/3142\"",
+      "evidence": {
+        "latest": "2.88.2",
+        "deprecated": "request has been deprecated, see https://github.com/request/request/issues/3142",
+        "modified": "2026-07-17T17:10:13.431Z",
+        "daysSinceModified": 78,
+        "versionCount": 126
+      },
+      "source": "https://registry.npmjs.org/request",
+      "checkedAt": "2026-10-04T06:37:03.652Z",
+      "confirmation": {
+        "attempts": 1,
+        "originalState": "dead",
+        "originalSummary": "request@2.88.2 is deprecated: \"request has been deprecated, see https://github.com/request/request/issues/3142\"",
+        "outcome": "confirmed"
+      }
+    },
+    {
+      "signal": "jobs",
+      "state": "unknown",
+      "unknownReason": "inconclusive",
+      "weight": 0,
+      "summary": "no public Greenhouse/Ashby/Lever board for request (absence of evidence, not counted)",
+      "evidence": {
+        "slugs": [
+          "request"
+        ],
+        "slugsGuessed": true,
+        "found": [],
+        "errors": [],
+        "absent": [
+          "greenhouse/request",
+          "ashby/request",
+          "lever/request"
+        ]
+      },
+      "checkedAt": "2026-10-04T06:37:00.787Z"
+    }
+  ],
+  "startedAt": "2026-10-04T06:36:59.720Z",
+  "finishedAt": "2026-10-04T06:37:03.653Z",
+  "tool": {
+    "name": "isitdead",
+    "version": "0.1.0"
+  },
+  "confirmation": {
+    "negatives": 2,
+    "confirmed": 2,
+    "flippedAlive": 0,
+    "unconfirmed": 0,
+    "errors": 0,
+    "recovered": 0,
+    "stillError": 0,
+    "attempts": 2
+  },
+  "discoveryVerdict": "DEAD"
+}

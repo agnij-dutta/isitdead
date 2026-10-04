@@ -1,0 +1,15 @@
+github:request (npm:request)  DEAD  confidence 91%
+
+Why:
+  - github: last push to an original repo 2.1 years ago (request) [confirmed serially, 1 attempt(s)]
+  - npm: request@2.88.2 is deprecated: "request has been deprecated, see https://github.com/request/request/issues/3142" [confirmed serially, 1 attempt(s)]
+
+Signals:
+  STALE   github  last push to an original repo 2.1 years ago (request)  (negative confirmed serially, 1 attempt(s))
+                  https://api.github.com/users/request/repos?sort=pushed&direction=desc&per_page=100&type=owner  @ 2026-10-04T06:37:02.292Z
+  DEAD    npm     request@2.88.2 is deprecated: "request has been deprecated, see https://github.com/request/request/issues/3142"  (negative confirmed serially, 1 attempt(s))
+                  https://registry.npmjs.org/request  @ 2026-10-04T06:37:03.652Z
+  UNCLEAR jobs    no public Greenhouse/Ashby/Lever board for request (absence of evidence, not counted)
+                  @ 2026-10-04T06:37:00.787Z
+
+2 negative(s) re-checked serially: 2 confirmed, 0 flipped to alive, 0 downgraded to unknown.

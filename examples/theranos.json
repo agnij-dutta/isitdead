@@ -1,0 +1,207 @@
+{
+  "target": {
+    "input": "theranos.com",
+    "name": "Theranos",
+    "domain": "theranos.com",
+    "x": "theranos"
+  },
+  "verdict": {
+    "verdict": "DEAD",
+    "confidence": 0.67,
+    "why": [
+      "- hosting: DNS/hosting provider expiry page: host has suspended the site (matched \"expired dns hosting services\") [confirmed serially, 1 attempt(s)]",
+      "- x-activity: last tweet 8.7 years ago (2018-01-25) [confirmed serially, 1 attempt(s)]",
+      "+ http: HTTP 200",
+      "+ x-profile: @theranos exists (15698 followers), bio has no staleness markers",
+      "+ dns: theranos.com resolves (157.230.67.179)"
+    ],
+    "scores": {
+      "alive": 0.5,
+      "gone": 1,
+      "stale": 0.6,
+      "unknownErrors": 0
+    }
+  },
+  "signals": [
+    {
+      "signal": "dns",
+      "state": "alive",
+      "weight": 0.1,
+      "summary": "theranos.com resolves (157.230.67.179)",
+      "evidence": {
+        "ok": true,
+        "addresses": [
+          "157.230.67.179"
+        ]
+      },
+      "checkedAt": "2026-10-04T06:37:20.186Z"
+    },
+    {
+      "signal": "http",
+      "state": "alive",
+      "weight": 0.2,
+      "summary": "HTTP 200",
+      "evidence": {
+        "status": 200,
+        "finalUrl": "http://theranos.com/",
+        "chain": [
+          "200 http://theranos.com/"
+        ],
+        "title": "Expired DNS Hosting Services | DNS Made Easy",
+        "server": "nginx/1.14.2"
+      },
+      "source": "http://theranos.com/",
+      "checkedAt": "2026-10-04T06:37:20.138Z"
+    },
+    {
+      "signal": "hosting",
+      "state": "dead",
+      "kind": "gone",
+      "weight": 1,
+      "summary": "DNS/hosting provider expiry page: host has suspended the site (matched \"expired dns hosting services\")",
+      "evidence": {
+        "id": "dns-host-expired",
+        "label": "DNS/hosting provider expiry page",
+        "kind": "suspended",
+        "matched": "expired dns hosting services",
+        "status": 200
+      },
+      "source": "http://theranos.com/",
+      "checkedAt": "2026-10-04T06:37:21.832Z",
+      "confirmation": {
+        "attempts": 1,
+        "originalState": "dead",
+        "originalSummary": "DNS/hosting provider expiry page: host has suspended the site (matched \"expired dns hosting services\")",
+        "outcome": "confirmed"
+      }
+    },
+    {
+      "signal": "content",
+      "state": "unknown",
+      "unknownReason": "inconclusive",
+      "weight": 0,
+      "summary": "content check skipped (host error or parked page)",
+      "evidence": {},
+      "source": "http://theranos.com/",
+      "checkedAt": "2026-10-04T06:37:20.139Z"
+    },
+    {
+      "signal": "tls",
+      "state": "unknown",
+      "unknownReason": "inconclusive",
+      "weight": 0,
+      "summary": "nothing listening on theranos.com:443 (no HTTPS)",
+      "evidence": {
+        "ok": false,
+        "code": "ECONNREFUSED",
+        "message": "connect ECONNREFUSED 157.230.67.179:443"
+      },
+      "checkedAt": "2026-10-04T06:37:20.131Z"
+    },
+    {
+      "signal": "x-profile",
+      "state": "alive",
+      "weight": 0.2,
+      "summary": "@theranos exists (15698 followers), bio has no staleness markers",
+      "evidence": {
+        "handle": "theranos",
+        "name": "Theranos",
+        "bio": "Our mission is to make actionable information accessible to everyone at the time it matters.",
+        "followers": 15698,
+        "tweets": 1377,
+        "joined": "Thu Dec 22 07:09:45 +0000 2011",
+        "protected": false
+      },
+      "source": "https://api.fxtwitter.com/2/profile/theranos",
+      "checkedAt": "2026-10-04T06:37:19.926Z"
+    },
+    {
+      "signal": "x-activity",
+      "state": "dead",
+      "kind": "stale",
+      "weight": 0.6,
+      "summary": "last tweet 8.7 years ago (2018-01-25)",
+      "evidence": {
+        "lastTweetAt": "2018-01-25T01:22:54.000Z",
+        "daysSinceLastTweet": 3174,
+        "sampled": 20
+      },
+      "source": "https://api.fxtwitter.com/2/profile/theranos/statuses",
+      "checkedAt": "2026-10-04T06:37:24.028Z",
+      "confirmation": {
+        "attempts": 1,
+        "originalState": "dead",
+        "originalSummary": "last tweet 8.7 years ago (2018-01-25)",
+        "outcome": "confirmed"
+      }
+    },
+    {
+      "signal": "jobs",
+      "state": "unknown",
+      "unknownReason": "inconclusive",
+      "weight": 0,
+      "summary": "no public Greenhouse/Ashby/Lever board for theranos (absence of evidence, not counted)",
+      "evidence": {
+        "slugs": [
+          "theranos"
+        ],
+        "slugsGuessed": true,
+        "found": [],
+        "errors": [],
+        "absent": [
+          "greenhouse/theranos",
+          "ashby/theranos",
+          "lever/theranos"
+        ]
+      },
+      "checkedAt": "2026-10-04T06:37:19.927Z"
+    },
+    {
+      "signal": "wayback",
+      "state": "unknown",
+      "unknownReason": "inconclusive",
+      "weight": 0,
+      "summary": "Wayback: last capture with changed content 4 months ago (2026-06-15) (recent captures are not proof of life)",
+      "evidence": {
+        "lastChangedCapture": "2026-06-15T08:15:00.000Z",
+        "daysSince": 110,
+        "rows": [
+          [
+            "20260417184434",
+            "200",
+            "5F2R63CS42OLJDTWJFLCTAQU5VOZ4JW6"
+          ],
+          [
+            "20260615050307",
+            "200",
+            "HTBB76FYHZ3PNGBSB4LSM3ZLZO5IZLZU"
+          ],
+          [
+            "20260615081553",
+            "200",
+            "NTOYVRRTGLZVNYRKH4N6Z7X42V5F5WAW"
+          ]
+        ]
+      },
+      "source": "https://web.archive.org/cdx/search/cdx?url=theranos.com&output=json&fl=timestamp,statuscode,digest&filter=statuscode:200&collapse=digest&limit=-3",
+      "checkedAt": "2026-10-04T06:37:19.927Z"
+    }
+  ],
+  "startedAt": "2026-10-04T06:37:19.873Z",
+  "finishedAt": "2026-10-04T06:37:24.029Z",
+  "tool": {
+    "name": "isitdead",
+    "version": "0.1.0"
+  },
+  "confirmation": {
+    "negatives": 2,
+    "confirmed": 2,
+    "flippedAlive": 0,
+    "unconfirmed": 0,
+    "errors": 0,
+    "recovered": 0,
+    "stillError": 0,
+    "attempts": 2
+  },
+  "discoveryVerdict": "DEAD"
+}

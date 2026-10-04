@@ -1,0 +1,16 @@
+# Live companies (picked as obviously alive, well-known)
+name,domain,github,x,npm,ats
+Stripe,stripe.com,stripe,stripe,,
+Linear,linear.app,linear,linear,,
+Vercel,vercel.com,vercel,vercel,,
+Supabase,supabase.com,supabase,supabase,,
+Palantir,palantir.com,palantir,PalantirTech,,palantir
+# Known dead, shut down or archived (public, well-documented ends)
+Atom,atom.io,atom,AtomEditor,,
+request,,request,,request,
+Theranos,theranos.com,,theranos,,
+Sidewalk Labs,sidewalklabs.com,,sidewalklabs,,
+Rdio,rdio.com,,rdio,,
+Quibi,quibi.com,,quibi,,
+Fast,fast.co,,,,
+Juicero,juicero.com,,juicero,,

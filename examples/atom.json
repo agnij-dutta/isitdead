@@ -1,0 +1,224 @@
+{
+  "target": {
+    "input": "atom.io",
+    "name": "Atom",
+    "domain": "atom.io",
+    "github": "atom",
+    "x": "AtomEditor"
+  },
+  "verdict": {
+    "verdict": "DEAD",
+    "confidence": 0.84,
+    "why": [
+      "- content: page is a shutdown notice: \"Sunsetting Atom - The GitHub Blog\" [confirmed serially, 1 attempt(s)]",
+      "- github: all 100+ public repos are archived (read-only): explicitly end-of-life [confirmed serially, 1 attempt(s)]",
+      "- x-activity: last tweet 7.2 years ago (2019-07-23) [confirmed serially, 1 attempt(s)]",
+      "- http: no site of its own: atom.io redirects to github.blog [confirmed serially, 1 attempt(s)]",
+      "+ tls: valid TLS certificate, 83 days left (issuer Sectigo Limited)",
+      "+ x-profile: @AtomEditor exists (58783 followers), bio has no staleness markers"
+    ],
+    "scores": {
+      "alive": 0.5,
+      "gone": 2.3,
+      "stale": 0.6,
+      "unknownErrors": 0
+    }
+  },
+  "signals": [
+    {
+      "signal": "dns",
+      "state": "alive",
+      "weight": 0.1,
+      "summary": "atom.io resolves (140.82.114.17)",
+      "evidence": {
+        "ok": true,
+        "addresses": [
+          "140.82.114.17"
+        ]
+      },
+      "checkedAt": "2026-10-04T06:36:25.674Z"
+    },
+    {
+      "signal": "http",
+      "state": "dead",
+      "kind": "gone",
+      "weight": 0.3,
+      "summary": "no site of its own: atom.io redirects to github.blog",
+      "evidence": {
+        "status": 200,
+        "finalUrl": "https://github.blog/news-insights/product-news/sunsetting-atom/",
+        "chain": [
+          "301 https://atom.io/",
+          "301 https://github.blog/2022-06-08-sunsetting-atom/",
+          "301 https://github.blog/engineering/sunsetting-atom/",
+          "200 https://github.blog/news-insights/product-news/sunsetting-atom/"
+        ],
+        "title": "Sunsetting Atom - The GitHub Blog",
+        "redirectedToOtherSite": "github.blog",
+        "server": "nginx"
+      },
+      "source": "https://atom.io/",
+      "checkedAt": "2026-10-04T06:36:28.751Z",
+      "confirmation": {
+        "attempts": 1,
+        "originalState": "dead",
+        "originalSummary": "no site of its own: atom.io redirects to github.blog",
+        "outcome": "confirmed"
+      }
+    },
+    {
+      "signal": "hosting",
+      "state": "alive",
+      "weight": 0,
+      "summary": "no suspended, parked or missing-site markers",
+      "evidence": {},
+      "source": "https://github.blog/news-insights/product-news/sunsetting-atom/",
+      "checkedAt": "2026-10-04T06:36:26.505Z"
+    },
+    {
+      "signal": "content",
+      "state": "dead",
+      "kind": "gone",
+      "weight": 1,
+      "summary": "page is a shutdown notice: \"Sunsetting Atom - The GitHub Blog\"",
+      "evidence": {
+        "name": "Atom",
+        "title": "Sunsetting Atom - The GitHub Blog",
+        "notice": "Sunsetting Atom - The GitHub Blog"
+      },
+      "source": "https://github.blog/news-insights/product-news/sunsetting-atom/",
+      "checkedAt": "2026-10-04T06:36:28.754Z",
+      "confirmation": {
+        "attempts": 1,
+        "originalState": "dead",
+        "originalSummary": "page is a shutdown notice: \"Sunsetting Atom - The GitHub Blog\"",
+        "outcome": "confirmed"
+      }
+    },
+    {
+      "signal": "tls",
+      "state": "alive",
+      "weight": 0.2,
+      "summary": "valid TLS certificate, 83 days left (issuer Sectigo Limited)",
+      "evidence": {
+        "ok": true,
+        "validFrom": "2026-09-28T00:00:00.000Z",
+        "validTo": "2026-12-26T23:59:59.000Z",
+        "issuer": "Sectigo Limited",
+        "subject": "*.atom.io",
+        "authorized": true,
+        "daysLeft": 83
+      },
+      "checkedAt": "2026-10-04T06:36:26.107Z"
+    },
+    {
+      "signal": "github",
+      "state": "dead",
+      "kind": "gone",
+      "weight": 1,
+      "summary": "all 100+ public repos are archived (read-only): explicitly end-of-life",
+      "evidence": {
+        "repoCount": 100,
+        "truncated": true,
+        "forks": 8,
+        "originals": 92,
+        "archived": 100,
+        "newestAny": {
+          "name": "atom/scandal",
+          "pushedAt": "2023-08-11T13:17:06Z",
+          "fork": false
+        },
+        "forkNames": [
+          "atom/task-lists-js",
+          "atom/atom-docker-ci",
+          "atom/ripgrep",
+          "atom/tree-view-finder",
+          "atom/atom-ternjs"
+        ]
+      },
+      "source": "https://api.github.com/users/atom/repos?sort=pushed&direction=desc&per_page=100&type=owner",
+      "checkedAt": "2026-10-04T06:36:30.770Z",
+      "confirmation": {
+        "attempts": 1,
+        "originalState": "dead",
+        "originalSummary": "all 100+ public repos are archived (read-only): explicitly end-of-life",
+        "outcome": "confirmed"
+      }
+    },
+    {
+      "signal": "x-profile",
+      "state": "alive",
+      "weight": 0.2,
+      "summary": "@AtomEditor exists (58783 followers), bio has no staleness markers",
+      "evidence": {
+        "handle": "AtomEditor",
+        "name": "Atom Editor",
+        "bio": "Free and open source text editor, brought to you by GitHub",
+        "followers": 58783,
+        "tweets": 203,
+        "joined": "Tue Feb 11 23:04:57 +0000 2014",
+        "protected": false
+      },
+      "source": "https://api.fxtwitter.com/2/profile/AtomEditor",
+      "checkedAt": "2026-10-04T06:36:25.679Z"
+    },
+    {
+      "signal": "x-activity",
+      "state": "dead",
+      "kind": "stale",
+      "weight": 0.6,
+      "summary": "last tweet 7.2 years ago (2019-07-23)",
+      "evidence": {
+        "lastTweetAt": "2019-07-23T14:13:43.000Z",
+        "daysSinceLastTweet": 2629,
+        "sampled": 20
+      },
+      "source": "https://api.fxtwitter.com/2/profile/AtomEditor/statuses",
+      "checkedAt": "2026-10-04T06:36:32.999Z",
+      "confirmation": {
+        "attempts": 1,
+        "originalState": "dead",
+        "originalSummary": "last tweet 7.2 years ago (2019-07-23)",
+        "outcome": "confirmed"
+      }
+    },
+    {
+      "signal": "jobs",
+      "state": "unknown",
+      "unknownReason": "inconclusive",
+      "weight": 0,
+      "summary": "no public Greenhouse/Ashby/Lever board for atom (absence of evidence, not counted)",
+      "evidence": {
+        "slugs": [
+          "atom"
+        ],
+        "slugsGuessed": true,
+        "found": [],
+        "errors": [],
+        "absent": [
+          "greenhouse/atom",
+          "ashby/atom",
+          "lever/atom"
+        ]
+      },
+      "checkedAt": "2026-10-04T06:36:27.153Z"
+    }
+  ],
+  "startedAt": "2026-10-04T06:36:25.592Z",
+  "finishedAt": "2026-10-04T06:36:33.000Z",
+  "tool": {
+    "name": "isitdead",
+    "version": "0.1.0"
+  },
+  "confirmation": {
+    "negatives": 4,
+    "confirmed": 4,
+    "flippedAlive": 0,
+    "unconfirmed": 0,
+    "errors": 0,
+    "recovered": 0,
+    "stillError": 0,
+    "attempts": 3
+  },
+  "discoveryVerdict": "DEAD"
+}

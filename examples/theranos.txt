@@ -1,0 +1,30 @@
+Theranos (theranos.com, @theranos)  DEAD  confidence 67%
+
+Why:
+  - hosting: DNS/hosting provider expiry page: host has suspended the site (matched "expired dns hosting services") [confirmed serially, 1 attempt(s)]
+  - x-activity: last tweet 8.7 years ago (2018-01-25) [confirmed serially, 1 attempt(s)]
+  + http: HTTP 200
+  + x-profile: @theranos exists (15698 followers), bio has no staleness markers
+  + dns: theranos.com resolves (157.230.67.179)
+
+Signals:
+  ALIVE   dns         theranos.com resolves (157.230.67.179)
+                      @ 2026-10-04T06:37:20.186Z
+  ALIVE   http        HTTP 200
+                      http://theranos.com/  @ 2026-10-04T06:37:20.138Z
+  DEAD    hosting     DNS/hosting provider expiry page: host has suspended the site (matched "expired dns hosting services")  (negative confirmed serially, 1 attempt(s))
+                      http://theranos.com/  @ 2026-10-04T06:37:21.832Z
+  UNCLEAR content     content check skipped (host error or parked page)
+                      http://theranos.com/  @ 2026-10-04T06:37:20.139Z
+  UNCLEAR tls         nothing listening on theranos.com:443 (no HTTPS)
+                      @ 2026-10-04T06:37:20.131Z
+  ALIVE   x-profile   @theranos exists (15698 followers), bio has no staleness markers
+                      https://api.fxtwitter.com/2/profile/theranos  @ 2026-10-04T06:37:19.926Z
+  STALE   x-activity  last tweet 8.7 years ago (2018-01-25)  (negative confirmed serially, 1 attempt(s))
+                      https://api.fxtwitter.com/2/profile/theranos/statuses  @ 2026-10-04T06:37:24.028Z
+  UNCLEAR jobs        no public Greenhouse/Ashby/Lever board for theranos (absence of evidence, not counted)
+                      @ 2026-10-04T06:37:19.927Z
+  UNCLEAR wayback     Wayback: last capture with changed content 4 months ago (2026-06-15) (recent captures are not proof of life)
+                      https://web.archive.org/cdx/search/cdx?url=theranos.com&output=json&fl=timestamp,statuscode,digest&filter=statuscode:200&collapse=digest&limit=-3  @ 2026-10-04T06:37:19.927Z
+
+2 negative(s) re-checked serially: 2 confirmed, 0 flipped to alive, 0 downgraded to unknown.

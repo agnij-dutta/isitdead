@@ -1,0 +1,34 @@
+Simulated profile API that answers "User not found" when more than 2 requests are in flight.
+20 accounts, 5 truly gone, swept at concurrency 6.
+
+TARGET      VERDICT  CONF  TOP REASON
+@account01  ALIVE     71%  + x-activity: last tweet 3 days ago (2026-10-01) (parallel pass said DEAD)
+@account02  ALIVE     71%  + x-activity: last tweet 3 days ago (2026-10-01) (parallel pass said DEAD)
+@account03  ALIVE     71%  + x-activity: last tweet 3 days ago (2026-10-01) (parallel pass said DEAD)
+@account04  ALIVE     71%  + x-activity: last tweet 3 days ago (2026-10-01) (parallel pass said DEAD)
+@account05  ALIVE     71%  + x-activity: last tweet 3 days ago (2026-10-01) (parallel pass said DEAD)
+@account06  ALIVE     71%  + x-activity: last tweet 3 days ago (2026-10-01) (parallel pass said DEAD)
+@account07  ALIVE     71%  + x-activity: last tweet 3 days ago (2026-10-01) (parallel pass said DEAD)
+@account08  ALIVE     71%  + x-activity: last tweet 3 days ago (2026-10-01) (parallel pass said DEAD)
+@account09  ALIVE     71%  + x-activity: last tweet 3 days ago (2026-10-01) (parallel pass said DEAD)
+@account10  ALIVE     71%  + x-activity: last tweet 3 days ago (2026-10-01) (parallel pass said DEAD)
+@account11  ALIVE     71%  + x-activity: last tweet 3 days ago (2026-10-01) (parallel pass said DEAD)
+@account12  ALIVE     71%  + x-activity: last tweet 3 days ago (2026-10-01) (parallel pass said DEAD)
+@account13  ALIVE     71%  + x-activity: last tweet 3 days ago (2026-10-01) (parallel pass said DEAD)
+@account14  ALIVE     71%  + x-activity: last tweet 3 days ago (2026-10-01) (parallel pass said DEAD)
+@account15  ALIVE     71%  + x-activity: last tweet 3 days ago (2026-10-01) (parallel pass said DEAD)
+@account16  DEAD      68%  - x-profile: X account @account16 not found (deleted, renamed or suspended) [confirmed serially, 1 attempt(s)]
+@account17  DEAD      68%  - x-profile: X account @account17 not found (deleted, renamed or suspended) [confirmed serially, 1 attempt(s)]
+@account18  DEAD      68%  - x-profile: X account @account18 not found (deleted, renamed or suspended) [confirmed serially, 1 attempt(s)]
+@account19  DEAD      68%  - x-profile: X account @account19 not found (deleted, renamed or suspended) [confirmed serially, 1 attempt(s)]
+@account20  DEAD      68%  - x-profile: X account @account20 not found (deleted, renamed or suspended) [confirmed serially, 1 attempt(s)]
+
+Error vs absence report
+  Discovery: 20 targets at concurrency 6, 55 network requests (cache hits excluded)
+  Negatives in the parallel pass: 20
+    confirmed dead on serial re-check:   5
+    flipped to alive on serial re-check:  15
+    downgraded to unknown (re-check errored): 0
+  Parallel-pass false-negative rate: 75% of negatives did not survive confirmation
+  Errored signals retried: 0 (0 recovered, 0 still erroring, none counted as dead)
+  Verdicts changed by confirmation: 15 (15 would have been wrongly reported DEAD)

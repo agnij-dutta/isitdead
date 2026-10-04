@@ -1,0 +1,31 @@
+Atom (atom.io, github:atom, @AtomEditor)  DEAD  confidence 84%
+
+Why:
+  - content: page is a shutdown notice: "Sunsetting Atom - The GitHub Blog" [confirmed serially, 1 attempt(s)]
+  - github: all 100+ public repos are archived (read-only): explicitly end-of-life [confirmed serially, 1 attempt(s)]
+  - x-activity: last tweet 7.2 years ago (2019-07-23) [confirmed serially, 1 attempt(s)]
+  - http: no site of its own: atom.io redirects to github.blog [confirmed serially, 1 attempt(s)]
+  + tls: valid TLS certificate, 83 days left (issuer Sectigo Limited)
+  + x-profile: @AtomEditor exists (58783 followers), bio has no staleness markers
+
+Signals:
+  ALIVE   dns         atom.io resolves (140.82.114.17)
+                      @ 2026-10-04T06:36:25.674Z
+  DEAD    http        no site of its own: atom.io redirects to github.blog  (negative confirmed serially, 1 attempt(s))
+                      https://atom.io/  @ 2026-10-04T06:36:28.751Z
+  ALIVE   hosting     no suspended, parked or missing-site markers
+                      https://github.blog/news-insights/product-news/sunsetting-atom/  @ 2026-10-04T06:36:26.505Z
+  DEAD    content     page is a shutdown notice: "Sunsetting Atom - The GitHub Blog"  (negative confirmed serially, 1 attempt(s))
+                      https://github.blog/news-insights/product-news/sunsetting-atom/  @ 2026-10-04T06:36:28.754Z
+  ALIVE   tls         valid TLS certificate, 83 days left (issuer Sectigo Limited)
+                      @ 2026-10-04T06:36:26.107Z
+  DEAD    github      all 100+ public repos are archived (read-only): explicitly end-of-life  (negative confirmed serially, 1 attempt(s))
+                      https://api.github.com/users/atom/repos?sort=pushed&direction=desc&per_page=100&type=owner  @ 2026-10-04T06:36:30.770Z
+  ALIVE   x-profile   @AtomEditor exists (58783 followers), bio has no staleness markers
+                      https://api.fxtwitter.com/2/profile/AtomEditor  @ 2026-10-04T06:36:25.679Z
+  STALE   x-activity  last tweet 7.2 years ago (2019-07-23)  (negative confirmed serially, 1 attempt(s))
+                      https://api.fxtwitter.com/2/profile/AtomEditor/statuses  @ 2026-10-04T06:36:32.999Z
+  UNCLEAR jobs        no public Greenhouse/Ashby/Lever board for atom (absence of evidence, not counted)
+                      @ 2026-10-04T06:36:27.153Z
+
+4 negative(s) re-checked serially: 4 confirmed, 0 flipped to alive, 0 downgraded to unknown.

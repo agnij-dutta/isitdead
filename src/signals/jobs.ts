@@ -8,6 +8,8 @@ interface Board {
   count: (json: unknown) => number | undefined;
 }
 
+export const LEVER_LIMIT = 100;
+
 export const BOARDS: Board[] = [
   {
     ats: 'greenhouse',
@@ -24,7 +26,8 @@ export const BOARDS: Board[] = [
   },
   {
     ats: 'lever',
-    url: (s) => `https://api.lever.co/v0/postings/${encodeURIComponent(s)}?mode=json`,
+    // Lever returns full descriptions (6 MB for big boards); cap the page.
+    url: (s) => `https://api.lever.co/v0/postings/${encodeURIComponent(s)}?mode=json&limit=${LEVER_LIMIT}`,
     count: (j) => (Array.isArray(j) ? j.length : undefined),
   },
 ];
@@ -78,7 +81,8 @@ export const jobsProbe: Probe = {
       const f = withJobs[0]!;
       const total = withJobs.reduce((s, x) => s + x.count, 0);
       const guessNote = guessed ? ` (slug "${f.slug}" guessed from the name; verify it is the same company)` : '';
-      return [alive(ctx, 'jobs', guessed ? 0.8 : 1.0, `${total} open role(s) on ${withJobs.map((x) => `${x.ats}/${x.slug}`).join(', ')}${guessNote}`, { source: f.url, evidence: ev })];
+      const capped = withJobs.some((x) => x.ats === 'lever' && x.count >= LEVER_LIMIT) ? '+' : '';
+      return [alive(ctx, 'jobs', guessed ? 0.8 : 1.0, `${total}${capped} open role(s) on ${withJobs.map((x) => `${x.ats}/${x.slug}`).join(', ')}${guessNote}`, { source: f.url, evidence: ev })];
     }
     if (found.length) {
       const f = found[0]!;

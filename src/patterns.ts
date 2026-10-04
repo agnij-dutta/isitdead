@@ -78,6 +78,13 @@ export const FINGERPRINTS: Fingerprint[] = [
     body: [/404 not found.{0,80}fly\.io/],
   },
   {
+    id: 'dns-host-expired',
+    label: 'DNS/hosting provider expiry page',
+    kind: 'suspended',
+    // e.g. theranos.com serves "Expired DNS Hosting Services | DNS Made Easy"
+    body: [/expired dns hosting services/, /dns (hosting )?(service|account) (has )?expired/, /this (dns|hosting) (account|plan) has expired/],
+  },
+  {
     id: 'parked',
     label: 'Parked / for-sale domain',
     kind: 'parked',
@@ -151,7 +158,21 @@ export function nameVariants(name: string): string[] {
 
 export function extractTitle(html: string): string | undefined {
   const m = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
-  return m?.[1]?.replace(/\s+/g, ' ').trim().slice(0, 200) || undefined;
+  return m?.[1] ? decodeEntities(m[1]).replace(/[\u2013\u2014]/g, '-').replace(/\s+/g, ' ').trim().slice(0, 200) || undefined : undefined;
+}
+
+const NAMED: Record<string, string> = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', ndash: '-', mdash: '-', middot: '.' };
+
+export function decodeEntities(s: string): string {
+  return s.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (all, e: string) => {
+    if (e[0] === '#') {
+      const code = e[1] === 'x' || e[1] === 'X' ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10);
+      // Render dashes as plain hyphens in output.
+      if (code === 8211 || code === 8212) return '-';
+      return Number.isFinite(code) ? String.fromCodePoint(code) : all;
+    }
+    return NAMED[e.toLowerCase()] ?? all;
+  });
 }
 
 /** Visible-ish text: strip scripts, styles and tags. */

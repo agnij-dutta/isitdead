@@ -1,0 +1,2392 @@
+{
+  "tool": {
+    "name": "isitdead",
+    "version": "0.1.0"
+  },
+  "ranAt": "2026-10-04T06:36:18.828Z",
+  "concurrency": 6,
+  "requests": 115,
+  "confirmation": {
+    "negatives": 13,
+    "confirmed": 13,
+    "flippedAlive": 0,
+    "unconfirmed": 0,
+    "errors": 3,
+    "recovered": 0,
+    "stillError": 3,
+    "attempts": 20
+  },
+  "verdictsChanged": 0,
+  "verdictsRescued": 0,
+  "results": [
+    {
+      "target": {
+        "input": "stripe.com",
+        "name": "Stripe",
+        "domain": "stripe.com",
+        "github": "stripe",
+        "x": "stripe"
+      },
+      "verdict": {
+        "verdict": "ALIVE",
+        "confidence": 0.97,
+        "why": [
+          "+ github: last push to an original repo today (stripe-ios); 6 archived",
+          "+ jobs: 716 open role(s) on greenhouse/stripe (slug \"stripe\" guessed from the name; verify it is the same company)",
+          "+ x-activity: last tweet 3 days ago (2026-09-30)",
+          "+ content: page mentions \"stripe\" (title: \"Stripe | Financial Infrastructure to Grow Your Revenue\")",
+          "+ http: HTTP 200 after 1 redirect(s)",
+          "+ tls: valid TLS certificate, 67 days left (issuer DigiCert, Inc.)"
+        ],
+        "scores": {
+          "alive": 3.6,
+          "gone": 0,
+          "stale": 0,
+          "unknownErrors": 0
+        }
+      },
+      "signals": [
+        {
+          "signal": "dns",
+          "state": "alive",
+          "weight": 0.1,
+          "summary": "stripe.com resolves (198.202.176.111, 198.137.150.111)",
+          "evidence": {
+            "ok": true,
+            "addresses": [
+              "198.202.176.111",
+              "198.137.150.111"
+            ]
+          },
+          "checkedAt": "2026-10-04T06:34:10.004Z"
+        },
+        {
+          "signal": "http",
+          "state": "alive",
+          "weight": 0.2,
+          "summary": "HTTP 200 after 1 redirect(s)",
+          "evidence": {
+            "status": 200,
+            "finalUrl": "https://stripe.com/in",
+            "chain": [
+              "307 https://stripe.com/",
+              "200 https://stripe.com/in"
+            ],
+            "title": "Stripe | Financial Infrastructure to Grow Your Revenue",
+            "server": "nginx"
+          },
+          "source": "https://stripe.com/",
+          "checkedAt": "2026-10-04T06:34:10.693Z"
+        },
+        {
+          "signal": "hosting",
+          "state": "alive",
+          "weight": 0.1,
+          "summary": "no suspended, parked or missing-site markers",
+          "evidence": {},
+          "source": "https://stripe.com/in",
+          "checkedAt": "2026-10-04T06:34:10.703Z"
+        },
+        {
+          "signal": "content",
+          "state": "alive",
+          "weight": 0.3,
+          "summary": "page mentions \"stripe\" (title: \"Stripe | Financial Infrastructure to Grow Your Revenue\")",
+          "evidence": {
+            "name": "Stripe",
+            "nameDerived": false,
+            "title": "Stripe | Financial Infrastructure to Grow Your Revenue",
+            "textLength": 12981,
+            "matchedVariant": "stripe"
+          },
+          "source": "https://stripe.com/in",
+          "checkedAt": "2026-10-04T06:34:10.708Z"
+        },
+        {
+          "signal": "tls",
+          "state": "alive",
+          "weight": 0.2,
+          "summary": "valid TLS certificate, 67 days left (issuer DigiCert, Inc.)",
+          "evidence": {
+            "ok": true,
+            "validFrom": "2026-09-24T00:00:00.000Z",
+            "validTo": "2026-12-10T23:59:59.000Z",
+            "issuer": "DigiCert, Inc.",
+            "subject": "stripe.com",
+            "authorized": true,
+            "daysLeft": 67
+          },
+          "checkedAt": "2026-10-04T06:34:10.099Z"
+        },
+        {
+          "signal": "github",
+          "state": "alive",
+          "weight": 1,
+          "summary": "last push to an original repo today (stripe-ios); 6 archived",
+          "evidence": {
+            "repoCount": 100,
+            "truncated": true,
+            "forks": 6,
+            "originals": 94,
+            "archived": 6,
+            "newestOriginal": {
+              "name": "stripe/stripe-ios",
+              "pushedAt": "2026-10-04T06:22:17Z"
+            },
+            "newestAny": {
+              "name": "stripe/stripe-ios",
+              "pushedAt": "2026-10-04T06:22:17Z",
+              "fork": false
+            },
+            "forkNames": [
+              "stripe/winget-pkgs",
+              "stripe/goproxy",
+              "stripe/sync-engine-fork",
+              "stripe/detect-agent",
+              "stripe/glamour"
+            ],
+            "daysSinceOriginalPush": 0
+          },
+          "source": "https://api.github.com/users/stripe/repos?sort=pushed&direction=desc&per_page=100&type=owner",
+          "checkedAt": "2026-10-04T06:34:10.811Z"
+        },
+        {
+          "signal": "x-profile",
+          "state": "alive",
+          "weight": 0.2,
+          "summary": "@stripe exists (292903 followers), bio has no staleness markers",
+          "evidence": {
+            "handle": "stripe",
+            "name": "Stripe",
+            "bio": "Building programmable financial services. \n\nIncorporate: @atlas. \nHelp: @stripesupport. \nRead: @stripepress @WorksInProgMag. \nStatus: @stripestatus.",
+            "followers": 292903,
+            "tweets": 35751,
+            "joined": "Thu Jan 07 22:43:34 +0000 2010",
+            "protected": false
+          },
+          "source": "https://api.fxtwitter.com/2/profile/stripe",
+          "checkedAt": "2026-10-04T06:34:10.393Z"
+        },
+        {
+          "signal": "x-activity",
+          "state": "alive",
+          "weight": 0.7,
+          "summary": "last tweet 3 days ago (2026-09-30)",
+          "evidence": {
+            "lastTweetAt": "2026-09-30T20:00:14.000Z",
+            "daysSinceLastTweet": 3,
+            "sampled": 20
+          },
+          "source": "https://api.fxtwitter.com/2/profile/stripe/statuses",
+          "checkedAt": "2026-10-04T06:34:13.527Z"
+        },
+        {
+          "signal": "jobs",
+          "state": "alive",
+          "weight": 0.8,
+          "summary": "716 open role(s) on greenhouse/stripe (slug \"stripe\" guessed from the name; verify it is the same company)",
+          "evidence": {
+            "slugs": [
+              "stripe"
+            ],
+            "slugsGuessed": true,
+            "found": [
+              {
+                "ats": "greenhouse",
+                "slug": "stripe",
+                "count": 716,
+                "url": "https://boards-api.greenhouse.io/v1/boards/stripe/jobs"
+              }
+            ],
+            "errors": [],
+            "absent": [
+              "ashby/stripe",
+              "lever/stripe"
+            ]
+          },
+          "source": "https://boards-api.greenhouse.io/v1/boards/stripe/jobs",
+          "checkedAt": "2026-10-04T06:34:11.505Z"
+        }
+      ],
+      "startedAt": "2026-10-04T06:34:09.946Z",
+      "finishedAt": "2026-10-04T06:34:26.017Z",
+      "tool": {
+        "name": "isitdead",
+        "version": "0.1.0"
+      },
+      "confirmation": {
+        "negatives": 0,
+        "confirmed": 0,
+        "flippedAlive": 0,
+        "unconfirmed": 0,
+        "errors": 0,
+        "recovered": 0,
+        "stillError": 0,
+        "attempts": 0
+      },
+      "discoveryVerdict": "ALIVE"
+    },
+    {
+      "target": {
+        "input": "linear.app",
+        "name": "Linear",
+        "domain": "linear.app",
+        "github": "linear",
+        "x": "linear"
+      },
+      "verdict": {
+        "verdict": "ALIVE",
+        "confidence": 0.97,
+        "why": [
+          "+ github: last push to an original repo 2 days ago (linear-release-action); 4 archived",
+          "+ jobs: 30 open role(s) on ashby/linear (slug \"linear\" guessed from the name; verify it is the same company)",
+          "+ x-activity: last tweet 2 days ago (2026-10-01)",
+          "+ content: page mentions \"linear\" (title: \"Linear - The system for product development\")",
+          "+ http: HTTP 200",
+          "+ tls: valid TLS certificate, 85 days left (issuer Google Trust Services)"
+        ],
+        "scores": {
+          "alive": 3.6,
+          "gone": 0,
+          "stale": 0,
+          "unknownErrors": 0
+        }
+      },
+      "signals": [
+        {
+          "signal": "dns",
+          "state": "alive",
+          "weight": 0.1,
+          "summary": "linear.app resolves (172.64.147.211, 104.18.40.45)",
+          "evidence": {
+            "ok": true,
+            "addresses": [
+              "172.64.147.211",
+              "104.18.40.45"
+            ]
+          },
+          "checkedAt": "2026-10-04T06:34:10.004Z"
+        },
+        {
+          "signal": "http",
+          "state": "alive",
+          "weight": 0.2,
+          "summary": "HTTP 200",
+          "evidence": {
+            "status": 200,
+            "finalUrl": "https://linear.app/",
+            "chain": [
+              "200 https://linear.app/"
+            ],
+            "title": "Linear - The system for product development",
+            "server": "cloudflare"
+          },
+          "source": "https://linear.app/",
+          "checkedAt": "2026-10-04T06:34:10.571Z"
+        },
+        {
+          "signal": "hosting",
+          "state": "alive",
+          "weight": 0.1,
+          "summary": "no suspended, parked or missing-site markers",
+          "evidence": {},
+          "source": "https://linear.app/",
+          "checkedAt": "2026-10-04T06:34:10.585Z"
+        },
+        {
+          "signal": "content",
+          "state": "alive",
+          "weight": 0.3,
+          "summary": "page mentions \"linear\" (title: \"Linear - The system for product development\")",
+          "evidence": {
+            "name": "Linear",
+            "nameDerived": false,
+            "title": "Linear - The system for product development",
+            "textLength": 10485,
+            "matchedVariant": "linear"
+          },
+          "source": "https://linear.app/",
+          "checkedAt": "2026-10-04T06:34:10.594Z"
+        },
+        {
+          "signal": "tls",
+          "state": "alive",
+          "weight": 0.2,
+          "summary": "valid TLS certificate, 85 days left (issuer Google Trust Services)",
+          "evidence": {
+            "ok": true,
+            "validFrom": "2026-09-29T09:29:49.000Z",
+            "validTo": "2026-12-28T10:29:46.000Z",
+            "issuer": "Google Trust Services",
+            "subject": "linear.app",
+            "authorized": true,
+            "daysLeft": 85
+          },
+          "checkedAt": "2026-10-04T06:34:10.037Z"
+        },
+        {
+          "signal": "github",
+          "state": "alive",
+          "weight": 1,
+          "summary": "last push to an original repo 2 days ago (linear-release-action); 4 archived",
+          "evidence": {
+            "repoCount": 22,
+            "truncated": false,
+            "forks": 5,
+            "originals": 17,
+            "archived": 4,
+            "newestOriginal": {
+              "name": "linear/linear-release-action",
+              "pushedAt": "2026-10-01T18:14:35Z"
+            },
+            "newestAny": {
+              "name": "linear/linear-release-action",
+              "pushedAt": "2026-10-01T18:14:35Z",
+              "fork": false
+            },
+            "forkNames": [
+              "linear/ray-so",
+              "linear/bullmq",
+              "linear/graphql-inspector",
+              "linear/electron-prebuilt-compile",
+              "linear/tslint-react-hooks"
+            ],
+            "daysSinceOriginalPush": 2
+          },
+          "source": "https://api.github.com/users/linear/repos?sort=pushed&direction=desc&per_page=100&type=owner",
+          "checkedAt": "2026-10-04T06:34:11.011Z"
+        },
+        {
+          "signal": "x-profile",
+          "state": "alive",
+          "weight": 0.2,
+          "summary": "@linear exists (113978 followers), bio has no staleness markers",
+          "evidence": {
+            "handle": "linear",
+            "name": "Linear",
+            "bio": "The product development system for teams and agents.",
+            "followers": 113978,
+            "tweets": 3384,
+            "joined": "Wed Jan 09 22:35:37 +0000 2019",
+            "protected": false
+          },
+          "source": "https://api.fxtwitter.com/2/profile/linear",
+          "checkedAt": "2026-10-04T06:34:10.823Z"
+        },
+        {
+          "signal": "x-activity",
+          "state": "alive",
+          "weight": 0.7,
+          "summary": "last tweet 2 days ago (2026-10-01)",
+          "evidence": {
+            "lastTweetAt": "2026-10-01T17:49:06.000Z",
+            "daysSinceLastTweet": 2,
+            "sampled": 22
+          },
+          "source": "https://api.fxtwitter.com/2/profile/linear/statuses",
+          "checkedAt": "2026-10-04T06:34:13.651Z"
+        },
+        {
+          "signal": "jobs",
+          "state": "alive",
+          "weight": 0.8,
+          "summary": "30 open role(s) on ashby/linear (slug \"linear\" guessed from the name; verify it is the same company)",
+          "evidence": {
+            "slugs": [
+              "linear"
+            ],
+            "slugsGuessed": true,
+            "found": [
+              {
+                "ats": "ashby",
+                "slug": "linear",
+                "count": 30,
+                "url": "https://api.ashbyhq.com/posting-api/job-board/linear"
+              }
+            ],
+            "errors": [],
+            "absent": [
+              "greenhouse/linear",
+              "lever/linear"
+            ]
+          },
+          "source": "https://api.ashbyhq.com/posting-api/job-board/linear",
+          "checkedAt": "2026-10-04T06:34:11.712Z"
+        }
+      ],
+      "startedAt": "2026-10-04T06:34:09.980Z",
+      "finishedAt": "2026-10-04T06:34:26.018Z",
+      "tool": {
+        "name": "isitdead",
+        "version": "0.1.0"
+      },
+      "confirmation": {
+        "negatives": 0,
+        "confirmed": 0,
+        "flippedAlive": 0,
+        "unconfirmed": 0,
+        "errors": 0,
+        "recovered": 0,
+        "stillError": 0,
+        "attempts": 0
+      },
+      "discoveryVerdict": "ALIVE"
+    },
+    {
+      "target": {
+        "input": "vercel.com",
+        "name": "Vercel",
+        "domain": "vercel.com",
+        "github": "vercel",
+        "x": "vercel"
+      },
+      "verdict": {
+        "verdict": "ALIVE",
+        "confidence": 0.97,
+        "why": [
+          "+ github: last push to an original repo today (ai)",
+          "+ jobs: 85 open role(s) on greenhouse/vercel (slug \"vercel\" guessed from the name; verify it is the same company)",
+          "+ x-activity: last tweet 1 day ago (2026-10-02)",
+          "+ content: page mentions \"vercel\" (title: \"Agentic Infrastructure - Vercel\")",
+          "+ http: HTTP 200",
+          "+ tls: valid TLS certificate, 81 days left (issuer Let's Encrypt)"
+        ],
+        "scores": {
+          "alive": 3.6,
+          "gone": 0,
+          "stale": 0,
+          "unknownErrors": 0
+        }
+      },
+      "signals": [
+        {
+          "signal": "dns",
+          "state": "alive",
+          "weight": 0.1,
+          "summary": "vercel.com resolves (64.239.109.129, 64.239.123.193)",
+          "evidence": {
+            "ok": true,
+            "addresses": [
+              "64.239.109.129",
+              "64.239.123.193"
+            ]
+          },
+          "checkedAt": "2026-10-04T06:34:10.004Z"
+        },
+        {
+          "signal": "http",
+          "state": "alive",
+          "weight": 0.2,
+          "summary": "HTTP 200",
+          "evidence": {
+            "status": 200,
+            "finalUrl": "https://vercel.com/",
+            "chain": [
+              "200 https://vercel.com/"
+            ],
+            "title": "Agentic Infrastructure - Vercel",
+            "server": "Vercel"
+          },
+          "source": "https://vercel.com/",
+          "checkedAt": "2026-10-04T06:34:10.197Z"
+        },
+        {
+          "signal": "hosting",
+          "state": "alive",
+          "weight": 0.1,
+          "summary": "no suspended, parked or missing-site markers",
+          "evidence": {},
+          "source": "https://vercel.com/",
+          "checkedAt": "2026-10-04T06:34:10.205Z"
+        },
+        {
+          "signal": "content",
+          "state": "alive",
+          "weight": 0.3,
+          "summary": "page mentions \"vercel\" (title: \"Agentic Infrastructure - Vercel\")",
+          "evidence": {
+            "name": "Vercel",
+            "nameDerived": false,
+            "title": "Agentic Infrastructure - Vercel",
+            "textLength": 3707,
+            "matchedVariant": "vercel"
+          },
+          "source": "https://vercel.com/",
+          "checkedAt": "2026-10-04T06:34:10.208Z"
+        },
+        {
+          "signal": "tls",
+          "state": "alive",
+          "weight": 0.2,
+          "summary": "valid TLS certificate, 81 days left (issuer Let's Encrypt)",
+          "evidence": {
+            "ok": true,
+            "validFrom": "2026-09-25T12:18:22.000Z",
+            "validTo": "2026-12-24T12:18:21.000Z",
+            "issuer": "Let's Encrypt",
+            "subject": "*.vercel.com",
+            "authorized": true,
+            "daysLeft": 81
+          },
+          "checkedAt": "2026-10-04T06:34:10.066Z"
+        },
+        {
+          "signal": "github",
+          "state": "alive",
+          "weight": 1,
+          "summary": "last push to an original repo today (ai)",
+          "evidence": {
+            "repoCount": 100,
+            "truncated": true,
+            "forks": 11,
+            "originals": 89,
+            "archived": 0,
+            "newestOriginal": {
+              "name": "vercel/ai",
+              "pushedAt": "2026-10-04T04:57:28Z"
+            },
+            "newestAny": {
+              "name": "vercel/ai",
+              "pushedAt": "2026-10-04T04:57:28Z",
+              "fork": false
+            },
+            "forkNames": [
+              "vercel/nomad",
+              "vercel/firecracker-go-sdk",
+              "vercel/remix",
+              "vercel/models.dev",
+              "vercel/gitpkg"
+            ],
+            "daysSinceOriginalPush": 0
+          },
+          "source": "https://api.github.com/users/vercel/repos?sort=pushed&direction=desc&per_page=100&type=owner",
+          "checkedAt": "2026-10-04T06:34:11.631Z"
+        },
+        {
+          "signal": "x-profile",
+          "state": "alive",
+          "weight": 0.2,
+          "summary": "@vercel exists (461478 followers), bio has no staleness markers",
+          "evidence": {
+            "handle": "vercel",
+            "name": "Vercel",
+            "bio": "Agentic Infrastructure for apps and agents.",
+            "followers": 461478,
+            "tweets": 1946,
+            "joined": "Fri Jan 01 03:49:12 +0000 2016",
+            "protected": false
+          },
+          "source": "https://api.fxtwitter.com/2/profile/vercel",
+          "checkedAt": "2026-10-04T06:34:11.078Z"
+        },
+        {
+          "signal": "x-activity",
+          "state": "alive",
+          "weight": 0.7,
+          "summary": "last tweet 1 day ago (2026-10-02)",
+          "evidence": {
+            "lastTweetAt": "2026-10-02T21:47:46.000Z",
+            "daysSinceLastTweet": 1,
+            "sampled": 19
+          },
+          "source": "https://api.fxtwitter.com/2/profile/vercel/statuses",
+          "checkedAt": "2026-10-04T06:34:14.842Z"
+        },
+        {
+          "signal": "jobs",
+          "state": "alive",
+          "weight": 0.8,
+          "summary": "85 open role(s) on greenhouse/vercel (slug \"vercel\" guessed from the name; verify it is the same company)",
+          "evidence": {
+            "slugs": [
+              "vercel"
+            ],
+            "slugsGuessed": true,
+            "found": [
+              {
+                "ats": "greenhouse",
+                "slug": "vercel",
+                "count": 85,
+                "url": "https://boards-api.greenhouse.io/v1/boards/vercel/jobs"
+              },
+              {
+                "ats": "ashby",
+                "slug": "vercel",
+                "count": 0,
+                "url": "https://api.ashbyhq.com/posting-api/job-board/vercel"
+              }
+            ],
+            "errors": [],
+            "absent": [
+              "lever/vercel"
+            ]
+          },
+          "source": "https://boards-api.greenhouse.io/v1/boards/vercel/jobs",
+          "checkedAt": "2026-10-04T06:34:11.822Z"
+        }
+      ],
+      "startedAt": "2026-10-04T06:34:09.981Z",
+      "finishedAt": "2026-10-04T06:34:26.018Z",
+      "tool": {
+        "name": "isitdead",
+        "version": "0.1.0"
+      },
+      "confirmation": {
+        "negatives": 0,
+        "confirmed": 0,
+        "flippedAlive": 0,
+        "unconfirmed": 0,
+        "errors": 0,
+        "recovered": 0,
+        "stillError": 0,
+        "attempts": 0
+      },
+      "discoveryVerdict": "ALIVE"
+    },
+    {
+      "target": {
+        "input": "supabase.com",
+        "name": "Supabase",
+        "domain": "supabase.com",
+        "github": "supabase",
+        "x": "supabase"
+      },
+      "verdict": {
+        "verdict": "ALIVE",
+        "confidence": 0.97,
+        "why": [
+          "+ github: last push to an original repo today (cli); 6 archived",
+          "+ jobs: 48 open role(s) on ashby/supabase (slug \"supabase\" guessed from the name; verify it is the same company)",
+          "+ x-activity: last tweet today (2026-10-04)",
+          "+ content: page mentions \"supabase\" (title: \"Supabase | The Postgres Development Platform\")",
+          "+ http: HTTP 200",
+          "+ tls: valid TLS certificate, 66 days left (issuer Let's Encrypt)"
+        ],
+        "scores": {
+          "alive": 3.6,
+          "gone": 0,
+          "stale": 0,
+          "unknownErrors": 0
+        }
+      },
+      "signals": [
+        {
+          "signal": "dns",
+          "state": "alive",
+          "weight": 0.1,
+          "summary": "supabase.com resolves (216.150.1.193)",
+          "evidence": {
+            "ok": true,
+            "addresses": [
+              "216.150.1.193"
+            ]
+          },
+          "checkedAt": "2026-10-04T06:34:10.004Z"
+        },
+        {
+          "signal": "http",
+          "state": "alive",
+          "weight": 0.2,
+          "summary": "HTTP 200",
+          "evidence": {
+            "status": 200,
+            "finalUrl": "https://supabase.com/",
+            "chain": [
+              "200 https://supabase.com/"
+            ],
+            "title": "Supabase | The Postgres Development Platform",
+            "server": "Vercel"
+          },
+          "source": "https://supabase.com/",
+          "checkedAt": "2026-10-04T06:34:10.175Z"
+        },
+        {
+          "signal": "hosting",
+          "state": "alive",
+          "weight": 0.1,
+          "summary": "no suspended, parked or missing-site markers",
+          "evidence": {},
+          "source": "https://supabase.com/",
+          "checkedAt": "2026-10-04T06:34:10.188Z"
+        },
+        {
+          "signal": "content",
+          "state": "alive",
+          "weight": 0.3,
+          "summary": "page mentions \"supabase\" (title: \"Supabase | The Postgres Development Platform\")",
+          "evidence": {
+            "name": "Supabase",
+            "nameDerived": false,
+            "title": "Supabase | The Postgres Development Platform",
+            "textLength": 8704,
+            "matchedVariant": "supabase"
+          },
+          "source": "https://supabase.com/",
+          "checkedAt": "2026-10-04T06:34:10.196Z"
+        },
+        {
+          "signal": "tls",
+          "state": "alive",
+          "weight": 0.2,
+          "summary": "valid TLS certificate, 66 days left (issuer Let's Encrypt)",
+          "evidence": {
+            "ok": true,
+            "validFrom": "2026-09-10T19:18:21.000Z",
+            "validTo": "2026-12-09T19:18:20.000Z",
+            "issuer": "Let's Encrypt",
+            "subject": "supabase.com",
+            "authorized": true,
+            "daysLeft": 66
+          },
+          "checkedAt": "2026-10-04T06:34:10.064Z"
+        },
+        {
+          "signal": "github",
+          "state": "alive",
+          "weight": 1,
+          "summary": "last push to an original repo today (cli); 6 archived",
+          "evidence": {
+            "repoCount": 100,
+            "truncated": true,
+            "forks": 24,
+            "originals": 76,
+            "archived": 6,
+            "newestOriginal": {
+              "name": "supabase/cli",
+              "pushedAt": "2026-10-04T05:25:42Z"
+            },
+            "newestAny": {
+              "name": "supabase/cli",
+              "pushedAt": "2026-10-04T05:25:42Z",
+              "fork": false
+            },
+            "forkNames": [
+              "supabase/beam",
+              "supabase/poolboy",
+              "supabase/atlas_exporter",
+              "supabase/phoenix",
+              "supabase/postgrest"
+            ],
+            "daysSinceOriginalPush": 0
+          },
+          "source": "https://api.github.com/users/supabase/repos?sort=pushed&direction=desc&per_page=100&type=owner",
+          "checkedAt": "2026-10-04T06:34:12.197Z"
+        },
+        {
+          "signal": "x-profile",
+          "state": "alive",
+          "weight": 0.2,
+          "summary": "@supabase exists (210991 followers), bio has no staleness markers",
+          "evidence": {
+            "handle": "supabase",
+            "name": "Supabase",
+            "bio": "The Postgres development platform.\n🌐 http://supabase.com\n⭐️ http://github.com/supabase\n🎥 http://youtube.com/supabase\n💬 http://discord.supabase.com",
+            "followers": 210991,
+            "tweets": 17385,
+            "joined": "Tue Jan 21 10:24:54 +0000 2020",
+            "protected": false
+          },
+          "source": "https://api.fxtwitter.com/2/profile/supabase",
+          "checkedAt": "2026-10-04T06:34:11.473Z"
+        },
+        {
+          "signal": "x-activity",
+          "state": "alive",
+          "weight": 0.7,
+          "summary": "last tweet today (2026-10-04)",
+          "evidence": {
+            "lastTweetAt": "2026-10-04T03:28:53.000Z",
+            "daysSinceLastTweet": 0,
+            "sampled": 20
+          },
+          "source": "https://api.fxtwitter.com/2/profile/supabase/statuses",
+          "checkedAt": "2026-10-04T06:34:14.803Z"
+        },
+        {
+          "signal": "jobs",
+          "state": "alive",
+          "weight": 0.8,
+          "summary": "48 open role(s) on ashby/supabase (slug \"supabase\" guessed from the name; verify it is the same company)",
+          "evidence": {
+            "slugs": [
+              "supabase"
+            ],
+            "slugsGuessed": true,
+            "found": [
+              {
+                "ats": "ashby",
+                "slug": "supabase",
+                "count": 48,
+                "url": "https://api.ashbyhq.com/posting-api/job-board/supabase"
+              }
+            ],
+            "errors": [],
+            "absent": [
+              "greenhouse/supabase",
+              "lever/supabase"
+            ]
+          },
+          "source": "https://api.ashbyhq.com/posting-api/job-board/supabase",
+          "checkedAt": "2026-10-04T06:34:11.955Z"
+        }
+      ],
+      "startedAt": "2026-10-04T06:34:09.982Z",
+      "finishedAt": "2026-10-04T06:34:26.018Z",
+      "tool": {
+        "name": "isitdead",
+        "version": "0.1.0"
+      },
+      "confirmation": {
+        "negatives": 0,
+        "confirmed": 0,
+        "flippedAlive": 0,
+        "unconfirmed": 0,
+        "errors": 0,
+        "recovered": 0,
+        "stillError": 0,
+        "attempts": 0
+      },
+      "discoveryVerdict": "ALIVE"
+    },
+    {
+      "target": {
+        "input": "palantir.com",
+        "name": "Palantir",
+        "domain": "palantir.com",
+        "github": "palantir",
+        "x": "PalantirTech",
+        "ats": "palantir"
+      },
+      "verdict": {
+        "verdict": "ALIVE",
+        "confidence": 0.97,
+        "why": [
+          "+ github: last push to an original repo today (go-compiles)",
+          "+ jobs: 100+ open role(s) on lever/palantir",
+          "+ x-activity: last tweet 2 days ago (2026-10-01)",
+          "+ content: page mentions \"palantir\" (title: \"Home | Palantir\")",
+          "+ http: HTTP 200 after 1 redirect(s)",
+          "+ tls: valid TLS certificate, 97 days left (issuer GlobalSign nv-sa)"
+        ],
+        "scores": {
+          "alive": 3.8,
+          "gone": 0,
+          "stale": 0,
+          "unknownErrors": 0
+        }
+      },
+      "signals": [
+        {
+          "signal": "dns",
+          "state": "alive",
+          "weight": 0.1,
+          "summary": "palantir.com resolves (151.101.1.170, 151.101.129.170, 151.101.193.170)",
+          "evidence": {
+            "ok": true,
+            "addresses": [
+              "151.101.1.170",
+              "151.101.129.170",
+              "151.101.193.170",
+              "151.101.65.170"
+            ]
+          },
+          "checkedAt": "2026-10-04T06:34:10.004Z"
+        },
+        {
+          "signal": "http",
+          "state": "alive",
+          "weight": 0.2,
+          "summary": "HTTP 200 after 1 redirect(s)",
+          "evidence": {
+            "status": 200,
+            "finalUrl": "https://www.palantir.com/",
+            "chain": [
+              "302 https://palantir.com/",
+              "200 https://www.palantir.com/"
+            ],
+            "title": "Home | Palantir",
+            "server": "AmazonS3"
+          },
+          "source": "https://palantir.com/",
+          "checkedAt": "2026-10-04T06:34:10.157Z"
+        },
+        {
+          "signal": "hosting",
+          "state": "alive",
+          "weight": 0.1,
+          "summary": "no suspended, parked or missing-site markers",
+          "evidence": {},
+          "source": "https://www.palantir.com/",
+          "checkedAt": "2026-10-04T06:34:10.162Z"
+        },
+        {
+          "signal": "content",
+          "state": "alive",
+          "weight": 0.3,
+          "summary": "page mentions \"palantir\" (title: \"Home | Palantir\")",
+          "evidence": {
+            "name": "Palantir",
+            "nameDerived": false,
+            "title": "Home | Palantir",
+            "textLength": 28,
+            "matchedVariant": "palantir"
+          },
+          "source": "https://www.palantir.com/",
+          "checkedAt": "2026-10-04T06:34:10.166Z"
+        },
+        {
+          "signal": "tls",
+          "state": "alive",
+          "weight": 0.2,
+          "summary": "valid TLS certificate, 97 days left (issuer GlobalSign nv-sa)",
+          "evidence": {
+            "ok": true,
+            "validFrom": "2025-12-08T20:05:17.000Z",
+            "validTo": "2027-01-09T20:05:16.000Z",
+            "issuer": "GlobalSign nv-sa",
+            "subject": "palantir.com",
+            "authorized": true,
+            "daysLeft": 97
+          },
+          "checkedAt": "2026-10-04T06:34:10.047Z"
+        },
+        {
+          "signal": "github",
+          "state": "alive",
+          "weight": 1,
+          "summary": "last push to an original repo today (go-compiles)",
+          "evidence": {
+            "repoCount": 100,
+            "truncated": true,
+            "forks": 0,
+            "originals": 100,
+            "archived": 0,
+            "newestOriginal": {
+              "name": "palantir/go-compiles",
+              "pushedAt": "2026-10-04T06:34:00Z"
+            },
+            "newestAny": {
+              "name": "palantir/go-compiles",
+              "pushedAt": "2026-10-04T06:34:00Z",
+              "fork": false
+            },
+            "forkNames": [],
+            "daysSinceOriginalPush": 0
+          },
+          "source": "https://api.github.com/users/palantir/repos?sort=pushed&direction=desc&per_page=100&type=owner",
+          "checkedAt": "2026-10-04T06:34:12.595Z"
+        },
+        {
+          "signal": "x-profile",
+          "state": "alive",
+          "weight": 0.2,
+          "summary": "@PalantirTech exists (449954 followers), bio has no staleness markers",
+          "evidence": {
+            "handle": "PalantirTech",
+            "name": "Palantir",
+            "bio": "Own the means of production. Revolt with us.",
+            "followers": 449954,
+            "tweets": 3067,
+            "joined": "Tue May 05 16:31:51 +0000 2009",
+            "protected": false
+          },
+          "source": "https://api.fxtwitter.com/2/profile/PalantirTech",
+          "checkedAt": "2026-10-04T06:34:11.871Z"
+        },
+        {
+          "signal": "x-activity",
+          "state": "alive",
+          "weight": 0.7,
+          "summary": "last tweet 2 days ago (2026-10-01)",
+          "evidence": {
+            "lastTweetAt": "2026-10-01T22:47:32.000Z",
+            "daysSinceLastTweet": 2,
+            "sampled": 20
+          },
+          "source": "https://api.fxtwitter.com/2/profile/PalantirTech/statuses",
+          "checkedAt": "2026-10-04T06:34:15.932Z"
+        },
+        {
+          "signal": "jobs",
+          "state": "alive",
+          "weight": 1,
+          "summary": "100+ open role(s) on lever/palantir",
+          "evidence": {
+            "slugs": [
+              "palantir"
+            ],
+            "slugsGuessed": false,
+            "found": [
+              {
+                "ats": "lever",
+                "slug": "palantir",
+                "count": 100,
+                "url": "https://api.lever.co/v0/postings/palantir?mode=json&limit=100"
+              }
+            ],
+            "errors": [],
+            "absent": [
+              "greenhouse/palantir",
+              "ashby/palantir"
+            ]
+          },
+          "source": "https://api.lever.co/v0/postings/palantir?mode=json&limit=100",
+          "checkedAt": "2026-10-04T06:34:14.477Z"
+        }
+      ],
+      "startedAt": "2026-10-04T06:34:09.983Z",
+      "finishedAt": "2026-10-04T06:34:26.018Z",
+      "tool": {
+        "name": "isitdead",
+        "version": "0.1.0"
+      },
+      "confirmation": {
+        "negatives": 0,
+        "confirmed": 0,
+        "flippedAlive": 0,
+        "unconfirmed": 0,
+        "errors": 0,
+        "recovered": 0,
+        "stillError": 0,
+        "attempts": 0
+      },
+      "discoveryVerdict": "ALIVE"
+    },
+    {
+      "target": {
+        "input": "atom.io",
+        "name": "Atom",
+        "domain": "atom.io",
+        "github": "atom",
+        "x": "AtomEditor"
+      },
+      "verdict": {
+        "verdict": "DEAD",
+        "confidence": 0.84,
+        "why": [
+          "- content: page is a shutdown notice: \"Sunsetting Atom - The GitHub Blog\" [confirmed serially, 1 attempt(s)]",
+          "- github: all 100+ public repos are archived (read-only): explicitly end-of-life [confirmed serially, 1 attempt(s)]",
+          "- x-activity: last tweet 7.2 years ago (2019-07-23) [confirmed serially, 1 attempt(s)]",
+          "- http: no site of its own: atom.io redirects to github.blog [confirmed serially, 1 attempt(s)]",
+          "+ tls: valid TLS certificate, 83 days left (issuer Sectigo Limited)",
+          "+ x-profile: @AtomEditor exists (58783 followers), bio has no staleness markers"
+        ],
+        "scores": {
+          "alive": 0.5,
+          "gone": 2.3,
+          "stale": 0.6,
+          "unknownErrors": 0
+        }
+      },
+      "signals": [
+        {
+          "signal": "dns",
+          "state": "alive",
+          "weight": 0.1,
+          "summary": "atom.io resolves (140.82.114.17)",
+          "evidence": {
+            "ok": true,
+            "addresses": [
+              "140.82.114.17"
+            ]
+          },
+          "checkedAt": "2026-10-04T06:34:10.004Z"
+        },
+        {
+          "signal": "http",
+          "state": "dead",
+          "kind": "gone",
+          "weight": 0.3,
+          "summary": "no site of its own: atom.io redirects to github.blog",
+          "evidence": {
+            "status": 200,
+            "finalUrl": "https://github.blog/news-insights/product-news/sunsetting-atom/",
+            "chain": [
+              "301 https://atom.io/",
+              "301 https://github.blog/2022-06-08-sunsetting-atom/",
+              "301 https://github.blog/engineering/sunsetting-atom/",
+              "200 https://github.blog/news-insights/product-news/sunsetting-atom/"
+            ],
+            "title": "Sunsetting Atom - The GitHub Blog",
+            "redirectedToOtherSite": "github.blog",
+            "server": "nginx"
+          },
+          "source": "https://atom.io/",
+          "checkedAt": "2026-10-04T06:34:28.623Z",
+          "confirmation": {
+            "attempts": 1,
+            "originalState": "dead",
+            "originalSummary": "no site of its own: atom.io redirects to github.blog",
+            "outcome": "confirmed"
+          }
+        },
+        {
+          "signal": "hosting",
+          "state": "alive",
+          "weight": 0,
+          "summary": "no suspended, parked or missing-site markers",
+          "evidence": {},
+          "source": "https://github.blog/news-insights/product-news/sunsetting-atom/",
+          "checkedAt": "2026-10-04T06:34:11.009Z"
+        },
+        {
+          "signal": "content",
+          "state": "dead",
+          "kind": "gone",
+          "weight": 1,
+          "summary": "page is a shutdown notice: \"Sunsetting Atom - The GitHub Blog\"",
+          "evidence": {
+            "name": "Atom",
+            "title": "Sunsetting Atom - The GitHub Blog",
+            "notice": "Sunsetting Atom - The GitHub Blog"
+          },
+          "source": "https://github.blog/news-insights/product-news/sunsetting-atom/",
+          "checkedAt": "2026-10-04T06:34:28.626Z",
+          "confirmation": {
+            "attempts": 1,
+            "originalState": "dead",
+            "originalSummary": "page is a shutdown notice: \"Sunsetting Atom - The GitHub Blog\"",
+            "outcome": "confirmed"
+          }
+        },
+        {
+          "signal": "tls",
+          "state": "alive",
+          "weight": 0.2,
+          "summary": "valid TLS certificate, 83 days left (issuer Sectigo Limited)",
+          "evidence": {
+            "ok": true,
+            "validFrom": "2026-09-28T00:00:00.000Z",
+            "validTo": "2026-12-26T23:59:59.000Z",
+            "issuer": "Sectigo Limited",
+            "subject": "*.atom.io",
+            "authorized": true,
+            "daysLeft": 83
+          },
+          "checkedAt": "2026-10-04T06:34:10.435Z"
+        },
+        {
+          "signal": "github",
+          "state": "dead",
+          "kind": "gone",
+          "weight": 1,
+          "summary": "all 100+ public repos are archived (read-only): explicitly end-of-life",
+          "evidence": {
+            "repoCount": 100,
+            "truncated": true,
+            "forks": 8,
+            "originals": 92,
+            "archived": 100,
+            "newestAny": {
+              "name": "atom/scandal",
+              "pushedAt": "2023-08-11T13:17:06Z",
+              "fork": false
+            },
+            "forkNames": [
+              "atom/task-lists-js",
+              "atom/atom-docker-ci",
+              "atom/ripgrep",
+              "atom/tree-view-finder",
+              "atom/atom-ternjs"
+            ]
+          },
+          "source": "https://api.github.com/users/atom/repos?sort=pushed&direction=desc&per_page=100&type=owner",
+          "checkedAt": "2026-10-04T06:34:29.837Z",
+          "confirmation": {
+            "attempts": 1,
+            "originalState": "dead",
+            "originalSummary": "all 100+ public repos are archived (read-only): explicitly end-of-life",
+            "outcome": "confirmed"
+          }
+        },
+        {
+          "signal": "x-profile",
+          "state": "alive",
+          "weight": 0.2,
+          "summary": "@AtomEditor exists (58783 followers), bio has no staleness markers",
+          "evidence": {
+            "handle": "AtomEditor",
+            "name": "Atom Editor",
+            "bio": "Free and open source text editor, brought to you by GitHub",
+            "followers": 58783,
+            "tweets": 203,
+            "joined": "Tue Feb 11 23:04:57 +0000 2014",
+            "protected": false
+          },
+          "source": "https://api.fxtwitter.com/2/profile/AtomEditor",
+          "checkedAt": "2026-10-04T06:34:12.289Z"
+        },
+        {
+          "signal": "x-activity",
+          "state": "dead",
+          "kind": "stale",
+          "weight": 0.6,
+          "summary": "last tweet 7.2 years ago (2019-07-23)",
+          "evidence": {
+            "lastTweetAt": "2019-07-23T14:13:43.000Z",
+            "daysSinceLastTweet": 2629,
+            "sampled": 20
+          },
+          "source": "https://api.fxtwitter.com/2/profile/AtomEditor/statuses",
+          "checkedAt": "2026-10-04T06:34:32.059Z",
+          "confirmation": {
+            "attempts": 1,
+            "originalState": "dead",
+            "originalSummary": "last tweet 7.2 years ago (2019-07-23)",
+            "outcome": "confirmed"
+          }
+        },
+        {
+          "signal": "jobs",
+          "state": "unknown",
+          "unknownReason": "inconclusive",
+          "weight": 0,
+          "summary": "no public Greenhouse/Ashby/Lever board for atom (absence of evidence, not counted)",
+          "evidence": {
+            "slugs": [
+              "atom"
+            ],
+            "slugsGuessed": true,
+            "found": [],
+            "errors": [],
+            "absent": [
+              "greenhouse/atom",
+              "ashby/atom",
+              "lever/atom"
+            ]
+          },
+          "checkedAt": "2026-10-04T06:34:11.958Z"
+        }
+      ],
+      "startedAt": "2026-10-04T06:34:09.985Z",
+      "finishedAt": "2026-10-04T06:34:32.059Z",
+      "tool": {
+        "name": "isitdead",
+        "version": "0.1.0"
+      },
+      "confirmation": {
+        "negatives": 4,
+        "confirmed": 4,
+        "flippedAlive": 0,
+        "unconfirmed": 0,
+        "errors": 0,
+        "recovered": 0,
+        "stillError": 0,
+        "attempts": 3
+      },
+      "discoveryVerdict": "DEAD"
+    },
+    {
+      "target": {
+        "input": "request",
+        "name": "request",
+        "github": "request",
+        "npm": "request"
+      },
+      "verdict": {
+        "verdict": "DEAD",
+        "confidence": 0.91,
+        "why": [
+          "- github: last push to an original repo 2.1 years ago (request) [confirmed serially, 1 attempt(s)]",
+          "- npm: request@2.88.2 is deprecated: \"request has been deprecated, see https://github.com/request/request/issues/3142\" [confirmed serially, 1 attempt(s)]"
+        ],
+        "scores": {
+          "alive": 0,
+          "gone": 1,
+          "stale": 1,
+          "unknownErrors": 0
+        }
+      },
+      "signals": [
+        {
+          "signal": "github",
+          "state": "dead",
+          "kind": "stale",
+          "weight": 1,
+          "summary": "last push to an original repo 2.1 years ago (request)",
+          "evidence": {
+            "repoCount": 29,
+            "truncated": false,
+            "forks": 1,
+            "originals": 28,
+            "archived": 0,
+            "newestOriginal": {
+              "name": "request/request",
+              "pushedAt": "2024-08-14T00:09:41Z"
+            },
+            "newestAny": {
+              "name": "request/request",
+              "pushedAt": "2024-08-14T00:09:41Z",
+              "fork": false
+            },
+            "forkNames": [
+              "request/http-duplex-client"
+            ],
+            "daysSinceOriginalPush": 781
+          },
+          "source": "https://api.github.com/users/request/repos?sort=pushed&direction=desc&per_page=100&type=owner",
+          "checkedAt": "2026-10-04T06:34:33.109Z",
+          "confirmation": {
+            "attempts": 1,
+            "originalState": "dead",
+            "originalSummary": "last push to an original repo 2.1 years ago (request)",
+            "outcome": "confirmed"
+          }
+        },
+        {
+          "signal": "npm",
+          "state": "dead",
+          "kind": "gone",
+          "weight": 1,
+          "summary": "request@2.88.2 is deprecated: \"request has been deprecated, see https://github.com/request/request/issues/3142\"",
+          "evidence": {
+            "latest": "2.88.2",
+            "deprecated": "request has been deprecated, see https://github.com/request/request/issues/3142",
+            "modified": "2026-07-17T17:10:13.431Z",
+            "daysSinceModified": 78,
+            "versionCount": 126
+          },
+          "source": "https://registry.npmjs.org/request",
+          "checkedAt": "2026-10-04T06:34:34.181Z",
+          "confirmation": {
+            "attempts": 1,
+            "originalState": "dead",
+            "originalSummary": "request@2.88.2 is deprecated: \"request has been deprecated, see https://github.com/request/request/issues/3142\"",
+            "outcome": "confirmed"
+          }
+        },
+        {
+          "signal": "jobs",
+          "state": "unknown",
+          "unknownReason": "inconclusive",
+          "weight": 0,
+          "summary": "no public Greenhouse/Ashby/Lever board for request (absence of evidence, not counted)",
+          "evidence": {
+            "slugs": [
+              "request"
+            ],
+            "slugsGuessed": true,
+            "found": [],
+            "errors": [],
+            "absent": [
+              "greenhouse/request",
+              "ashby/request",
+              "lever/request"
+            ]
+          },
+          "checkedAt": "2026-10-04T06:34:13.825Z"
+        }
+      ],
+      "startedAt": "2026-10-04T06:34:13.527Z",
+      "finishedAt": "2026-10-04T06:34:34.182Z",
+      "tool": {
+        "name": "isitdead",
+        "version": "0.1.0"
+      },
+      "confirmation": {
+        "negatives": 2,
+        "confirmed": 2,
+        "flippedAlive": 0,
+        "unconfirmed": 0,
+        "errors": 0,
+        "recovered": 0,
+        "stillError": 0,
+        "attempts": 2
+      },
+      "discoveryVerdict": "DEAD"
+    },
+    {
+      "target": {
+        "input": "theranos.com",
+        "name": "Theranos",
+        "domain": "theranos.com",
+        "x": "theranos"
+      },
+      "verdict": {
+        "verdict": "DEAD",
+        "confidence": 0.67,
+        "why": [
+          "- hosting: DNS/hosting provider expiry page: host has suspended the site (matched \"expired dns hosting services\") [confirmed serially, 1 attempt(s)]",
+          "- x-activity: last tweet 8.7 years ago (2018-01-25) [confirmed serially, 1 attempt(s)]",
+          "+ http: HTTP 200",
+          "+ x-profile: @theranos exists (15698 followers), bio has no staleness markers",
+          "+ dns: theranos.com resolves (157.230.67.179)"
+        ],
+        "scores": {
+          "alive": 0.5,
+          "gone": 1,
+          "stale": 0.6,
+          "unknownErrors": 0
+        }
+      },
+      "signals": [
+        {
+          "signal": "dns",
+          "state": "alive",
+          "weight": 0.1,
+          "summary": "theranos.com resolves (157.230.67.179)",
+          "evidence": {
+            "ok": true,
+            "addresses": [
+              "157.230.67.179"
+            ]
+          },
+          "checkedAt": "2026-10-04T06:34:13.688Z"
+        },
+        {
+          "signal": "http",
+          "state": "alive",
+          "weight": 0.2,
+          "summary": "HTTP 200",
+          "evidence": {
+            "status": 200,
+            "finalUrl": "http://theranos.com/",
+            "chain": [
+              "200 http://theranos.com/"
+            ],
+            "title": "Expired DNS Hosting Services | DNS Made Easy",
+            "server": "nginx/1.14.2"
+          },
+          "source": "http://theranos.com/",
+          "checkedAt": "2026-10-04T06:34:14.267Z"
+        },
+        {
+          "signal": "hosting",
+          "state": "dead",
+          "kind": "gone",
+          "weight": 1,
+          "summary": "DNS/hosting provider expiry page: host has suspended the site (matched \"expired dns hosting services\")",
+          "evidence": {
+            "id": "dns-host-expired",
+            "label": "DNS/hosting provider expiry page",
+            "kind": "suspended",
+            "matched": "expired dns hosting services",
+            "status": 200
+          },
+          "source": "http://theranos.com/",
+          "checkedAt": "2026-10-04T06:34:35.810Z",
+          "confirmation": {
+            "attempts": 1,
+            "originalState": "dead",
+            "originalSummary": "DNS/hosting provider expiry page: host has suspended the site (matched \"expired dns hosting services\")",
+            "outcome": "confirmed"
+          }
+        },
+        {
+          "signal": "content",
+          "state": "unknown",
+          "unknownReason": "inconclusive",
+          "weight": 0,
+          "summary": "content check skipped (host error or parked page)",
+          "evidence": {},
+          "source": "http://theranos.com/",
+          "checkedAt": "2026-10-04T06:34:14.268Z"
+        },
+        {
+          "signal": "tls",
+          "state": "unknown",
+          "unknownReason": "inconclusive",
+          "weight": 0,
+          "summary": "nothing listening on theranos.com:443 (no HTTPS)",
+          "evidence": {
+            "ok": false,
+            "code": "ECONNREFUSED",
+            "message": "connect ECONNREFUSED 157.230.67.179:443"
+          },
+          "checkedAt": "2026-10-04T06:34:13.863Z"
+        },
+        {
+          "signal": "x-profile",
+          "state": "alive",
+          "weight": 0.2,
+          "summary": "@theranos exists (15698 followers), bio has no staleness markers",
+          "evidence": {
+            "handle": "theranos",
+            "name": "Theranos",
+            "bio": "Our mission is to make actionable information accessible to everyone at the time it matters.",
+            "followers": 15698,
+            "tweets": 1377,
+            "joined": "Thu Dec 22 07:09:45 +0000 2011",
+            "protected": false
+          },
+          "source": "https://api.fxtwitter.com/2/profile/theranos",
+          "checkedAt": "2026-10-04T06:34:16.219Z"
+        },
+        {
+          "signal": "x-activity",
+          "state": "dead",
+          "kind": "stale",
+          "weight": 0.6,
+          "summary": "last tweet 8.7 years ago (2018-01-25)",
+          "evidence": {
+            "lastTweetAt": "2018-01-25T01:22:54.000Z",
+            "daysSinceLastTweet": 3174,
+            "sampled": 20
+          },
+          "source": "https://api.fxtwitter.com/2/profile/theranos/statuses",
+          "checkedAt": "2026-10-04T06:34:38.020Z",
+          "confirmation": {
+            "attempts": 1,
+            "originalState": "dead",
+            "originalSummary": "last tweet 8.7 years ago (2018-01-25)",
+            "outcome": "confirmed"
+          }
+        },
+        {
+          "signal": "jobs",
+          "state": "unknown",
+          "unknownReason": "inconclusive",
+          "weight": 0,
+          "summary": "no public Greenhouse/Ashby/Lever board for theranos (absence of evidence, not counted)",
+          "evidence": {
+            "slugs": [
+              "theranos"
+            ],
+            "slugsGuessed": true,
+            "found": [],
+            "errors": [],
+            "absent": [
+              "greenhouse/theranos",
+              "ashby/theranos",
+              "lever/theranos"
+            ]
+          },
+          "checkedAt": "2026-10-04T06:34:14.006Z"
+        }
+      ],
+      "startedAt": "2026-10-04T06:34:13.652Z",
+      "finishedAt": "2026-10-04T06:34:38.020Z",
+      "tool": {
+        "name": "isitdead",
+        "version": "0.1.0"
+      },
+      "confirmation": {
+        "negatives": 2,
+        "confirmed": 2,
+        "flippedAlive": 0,
+        "unconfirmed": 0,
+        "errors": 0,
+        "recovered": 0,
+        "stillError": 0,
+        "attempts": 2
+      },
+      "discoveryVerdict": "DEAD"
+    },
+    {
+      "target": {
+        "input": "sidewalklabs.com",
+        "name": "Sidewalk Labs",
+        "domain": "sidewalklabs.com",
+        "x": "sidewalklabs"
+      },
+      "verdict": {
+        "verdict": "DEAD",
+        "confidence": 0.7,
+        "why": [
+          "- content: page no longer mentions \"Sidewalk Labs\"; title is \"Stay informed - Google Earth\": domain may now belong to someone else [confirmed serially, 1 attempt(s)]",
+          "- x-activity: last tweet 4.8 years ago (2021-12-14) [confirmed serially, 1 attempt(s)]",
+          "- http: no site of its own: sidewalklabs.com redirects to mapsplatform.google.com [confirmed serially, 1 attempt(s)]",
+          "+ tls: valid TLS certificate, 35 days left (issuer Google Trust Services)",
+          "+ x-profile: @sidewalklabs exists (27729 followers), bio has no staleness markers",
+          "+ dns: sidewalklabs.com resolves (216.239.34.21, 216.239.38.21, 216.239.32.21)"
+        ],
+        "scores": {
+          "alive": 0.5,
+          "gone": 1.1,
+          "stale": 0.6,
+          "unknownErrors": 0
+        }
+      },
+      "signals": [
+        {
+          "signal": "dns",
+          "state": "alive",
+          "weight": 0.1,
+          "summary": "sidewalklabs.com resolves (216.239.34.21, 216.239.38.21, 216.239.32.21)",
+          "evidence": {
+            "ok": true,
+            "addresses": [
+              "216.239.34.21",
+              "216.239.38.21",
+              "216.239.32.21",
+              "216.239.36.21"
+            ]
+          },
+          "checkedAt": "2026-10-04T06:34:13.978Z"
+        },
+        {
+          "signal": "http",
+          "state": "dead",
+          "kind": "gone",
+          "weight": 0.3,
+          "summary": "no site of its own: sidewalklabs.com redirects to mapsplatform.google.com",
+          "evidence": {
+            "status": 200,
+            "finalUrl": "https://mapsplatform.google.com/maps-products/earth/signup/",
+            "chain": [
+              "308 https://sidewalklabs.com/",
+              "301 https://www.google.com/earth/about/design/",
+              "200 https://mapsplatform.google.com/maps-products/earth/signup/"
+            ],
+            "title": "Stay informed - Google Earth",
+            "redirectedToOtherSite": "mapsplatform.google.com",
+            "server": "sffe"
+          },
+          "source": "https://sidewalklabs.com/",
+          "checkedAt": "2026-10-04T06:34:39.837Z",
+          "confirmation": {
+            "attempts": 1,
+            "originalState": "dead",
+            "originalSummary": "no site of its own: sidewalklabs.com redirects to mapsplatform.google.com",
+            "outcome": "confirmed"
+          }
+        },
+        {
+          "signal": "hosting",
+          "state": "alive",
+          "weight": 0,
+          "summary": "no suspended, parked or missing-site markers",
+          "evidence": {},
+          "source": "https://mapsplatform.google.com/maps-products/earth/signup/",
+          "checkedAt": "2026-10-04T06:34:14.875Z"
+        },
+        {
+          "signal": "content",
+          "state": "dead",
+          "kind": "gone",
+          "weight": 0.8,
+          "summary": "page no longer mentions \"Sidewalk Labs\"; title is \"Stay informed - Google Earth\": domain may now belong to someone else",
+          "evidence": {
+            "name": "Sidewalk Labs",
+            "nameDerived": false,
+            "title": "Stay informed - Google Earth",
+            "textLength": 21853
+          },
+          "source": "https://mapsplatform.google.com/maps-products/earth/signup/",
+          "checkedAt": "2026-10-04T06:34:39.849Z",
+          "confirmation": {
+            "attempts": 1,
+            "originalState": "dead",
+            "originalSummary": "page no longer mentions \"Sidewalk Labs\"; title is \"Stay informed - Google Earth\": domain may now belong to someone else",
+            "outcome": "confirmed"
+          }
+        },
+        {
+          "signal": "tls",
+          "state": "alive",
+          "weight": 0.2,
+          "summary": "valid TLS certificate, 35 days left (issuer Google Trust Services)",
+          "evidence": {
+            "ok": true,
+            "validFrom": "2026-08-10T21:07:06.000Z",
+            "validTo": "2026-11-08T21:56:37.000Z",
+            "issuer": "Google Trust Services",
+            "subject": "sidewalklabs.com",
+            "authorized": true,
+            "daysLeft": 35
+          },
+          "checkedAt": "2026-10-04T06:34:14.111Z"
+        },
+        {
+          "signal": "x-profile",
+          "state": "alive",
+          "weight": 0.2,
+          "summary": "@sidewalklabs exists (27729 followers), bio has no staleness markers",
+          "evidence": {
+            "handle": "sidewalklabs",
+            "name": "Sidewalk Labs",
+            "bio": "Sidewalk Labs is an urban innovation unit within Google. We build products to radically improve quality of life in cities for all.",
+            "followers": 27729,
+            "tweets": 2077,
+            "joined": "Wed Jun 03 19:01:23 +0000 2015",
+            "protected": false
+          },
+          "source": "https://api.fxtwitter.com/2/profile/sidewalklabs",
+          "checkedAt": "2026-10-04T06:34:16.744Z"
+        },
+        {
+          "signal": "x-activity",
+          "state": "dead",
+          "kind": "stale",
+          "weight": 0.6,
+          "summary": "last tweet 4.8 years ago (2021-12-14)",
+          "evidence": {
+            "lastTweetAt": "2021-12-14T14:38:48.000Z",
+            "daysSinceLastTweet": 1754,
+            "sampled": 9
+          },
+          "source": "https://api.fxtwitter.com/2/profile/sidewalklabs/statuses",
+          "checkedAt": "2026-10-04T06:34:42.034Z",
+          "confirmation": {
+            "attempts": 1,
+            "originalState": "dead",
+            "originalSummary": "last tweet 4.8 years ago (2021-12-14)",
+            "outcome": "confirmed"
+          }
+        },
+        {
+          "signal": "jobs",
+          "state": "unknown",
+          "unknownReason": "inconclusive",
+          "weight": 0,
+          "summary": "no public Greenhouse/Ashby/Lever board for sidewalk, sidewalklabs (absence of evidence, not counted)",
+          "evidence": {
+            "slugs": [
+              "sidewalk",
+              "sidewalklabs"
+            ],
+            "slugsGuessed": true,
+            "found": [],
+            "errors": [],
+            "absent": [
+              "greenhouse/sidewalk",
+              "ashby/sidewalk",
+              "lever/sidewalk",
+              "greenhouse/sidewalklabs",
+              "ashby/sidewalklabs",
+              "lever/sidewalklabs"
+            ]
+          },
+          "checkedAt": "2026-10-04T06:34:14.582Z"
+        }
+      ],
+      "startedAt": "2026-10-04T06:34:13.965Z",
+      "finishedAt": "2026-10-04T06:34:42.034Z",
+      "tool": {
+        "name": "isitdead",
+        "version": "0.1.0"
+      },
+      "confirmation": {
+        "negatives": 3,
+        "confirmed": 3,
+        "flippedAlive": 0,
+        "unconfirmed": 0,
+        "errors": 0,
+        "recovered": 0,
+        "stillError": 0,
+        "attempts": 2
+      },
+      "discoveryVerdict": "DEAD"
+    },
+    {
+      "target": {
+        "input": "rdio.com",
+        "name": "Rdio",
+        "domain": "rdio.com",
+        "x": "rdio"
+      },
+      "verdict": {
+        "verdict": "DEAD",
+        "confidence": 0.61,
+        "why": [
+          "- x-profile: X account @rdio not found (deleted, renamed or suspended) [confirmed serially, 1 attempt(s)]",
+          "? dns: DNS lookup for rdio.com failed: ESERVFAIL (not counted as dead)"
+        ],
+        "scores": {
+          "alive": 0,
+          "gone": 0.7,
+          "stale": 0,
+          "unknownErrors": 1
+        }
+      },
+      "signals": [
+        {
+          "signal": "dns",
+          "state": "unknown",
+          "unknownReason": "error",
+          "weight": 0,
+          "summary": "DNS lookup for rdio.com failed: ESERVFAIL (not counted as dead)",
+          "evidence": {
+            "code": "ESERVFAIL",
+            "message": "queryA ESERVFAIL rdio.com"
+          },
+          "checkedAt": "2026-10-04T06:34:55.259Z",
+          "confirmation": {
+            "attempts": 3,
+            "originalState": "unknown",
+            "originalSummary": "DNS lookup for rdio.com failed: ESERVFAIL (not counted as dead)",
+            "outcome": "still-error"
+          }
+        },
+        {
+          "signal": "http",
+          "state": "unknown",
+          "unknownReason": "inconclusive",
+          "weight": 0,
+          "summary": "rdio.com did not resolve during fetch (see dns signal)",
+          "evidence": {
+            "error": "getaddrinfo ENOTFOUND rdio.com",
+            "code": "ENOTFOUND",
+            "attempts": [
+              "https://rdio.com/"
+            ],
+            "chain": []
+          },
+          "source": "https://rdio.com/",
+          "checkedAt": "2026-10-04T06:34:14.903Z"
+        },
+        {
+          "signal": "hosting",
+          "state": "unknown",
+          "unknownReason": "inconclusive",
+          "weight": 0,
+          "summary": "no page fetched, hosting check skipped",
+          "evidence": {},
+          "source": "https://rdio.com/",
+          "checkedAt": "2026-10-04T06:34:14.903Z"
+        },
+        {
+          "signal": "content",
+          "state": "unknown",
+          "unknownReason": "inconclusive",
+          "weight": 0,
+          "summary": "no page fetched, content check skipped",
+          "evidence": {},
+          "source": "https://rdio.com/",
+          "checkedAt": "2026-10-04T06:34:14.903Z"
+        },
+        {
+          "signal": "tls",
+          "state": "unknown",
+          "unknownReason": "inconclusive",
+          "weight": 0,
+          "summary": "rdio.com did not resolve for TLS (see dns signal)",
+          "evidence": {
+            "ok": false,
+            "code": "ENOTFOUND",
+            "message": "getaddrinfo ENOTFOUND rdio.com"
+          },
+          "checkedAt": "2026-10-04T06:34:14.903Z"
+        },
+        {
+          "signal": "x-profile",
+          "state": "dead",
+          "kind": "gone",
+          "weight": 0.7,
+          "summary": "X account @rdio not found (deleted, renamed or suspended)",
+          "evidence": {
+            "status": 404,
+            "message": "User not found"
+          },
+          "source": "https://api.fxtwitter.com/2/profile/rdio",
+          "checkedAt": "2026-10-04T06:34:57.095Z",
+          "confirmation": {
+            "attempts": 1,
+            "originalState": "dead",
+            "originalSummary": "X account @rdio not found (deleted, renamed or suspended)",
+            "outcome": "confirmed"
+          }
+        },
+        {
+          "signal": "jobs",
+          "state": "unknown",
+          "unknownReason": "inconclusive",
+          "weight": 0,
+          "summary": "no public Greenhouse/Ashby/Lever board for rdio (absence of evidence, not counted)",
+          "evidence": {
+            "slugs": [
+              "rdio"
+            ],
+            "slugsGuessed": true,
+            "found": [],
+            "errors": [],
+            "absent": [
+              "greenhouse/rdio",
+              "ashby/rdio",
+              "lever/rdio"
+            ]
+          },
+          "checkedAt": "2026-10-04T06:34:15.081Z"
+        }
+      ],
+      "startedAt": "2026-10-04T06:34:14.803Z",
+      "finishedAt": "2026-10-04T06:34:57.095Z",
+      "tool": {
+        "name": "isitdead",
+        "version": "0.1.0"
+      },
+      "confirmation": {
+        "negatives": 1,
+        "confirmed": 1,
+        "flippedAlive": 0,
+        "unconfirmed": 0,
+        "errors": 1,
+        "recovered": 0,
+        "stillError": 1,
+        "attempts": 4
+      },
+      "discoveryVerdict": "DEAD"
+    },
+    {
+      "target": {
+        "input": "quibi.com",
+        "name": "Quibi",
+        "domain": "quibi.com",
+        "x": "quibi"
+      },
+      "verdict": {
+        "verdict": "DORMANT",
+        "confidence": 0.35,
+        "why": [
+          "- x-profile: @quibi bio looks stale: \"We've moved! Please visit us at our\" [confirmed serially, 1 attempt(s)]",
+          "+ tls: valid TLS certificate, 67 days left (issuer Google Trust Services)",
+          "+ dns: quibi.com resolves (172.67.151.193, 104.21.88.181)"
+        ],
+        "scores": {
+          "alive": 0.3,
+          "gone": 0,
+          "stale": 0.6,
+          "unknownErrors": 0
+        }
+      },
+      "signals": [
+        {
+          "signal": "dns",
+          "state": "alive",
+          "weight": 0.1,
+          "summary": "quibi.com resolves (172.67.151.193, 104.21.88.181)",
+          "evidence": {
+            "ok": true,
+            "addresses": [
+              "172.67.151.193",
+              "104.21.88.181"
+            ]
+          },
+          "checkedAt": "2026-10-04T06:34:14.852Z"
+        },
+        {
+          "signal": "http",
+          "state": "unknown",
+          "unknownReason": "inconclusive",
+          "weight": 0,
+          "summary": "HTTP 403: blocked or behind a bot wall, cannot judge",
+          "evidence": {
+            "status": 403,
+            "finalUrl": "https://quibi.com/",
+            "chain": [
+              "403 https://quibi.com/"
+            ],
+            "title": "Attention Required! | Cloudflare",
+            "server": "cloudflare"
+          },
+          "source": "https://quibi.com/",
+          "checkedAt": "2026-10-04T06:34:14.954Z"
+        },
+        {
+          "signal": "hosting",
+          "state": "unknown",
+          "unknownReason": "inconclusive",
+          "weight": 0,
+          "summary": "no hosting markers on HTTP 403 page",
+          "evidence": {},
+          "source": "https://quibi.com/",
+          "checkedAt": "2026-10-04T06:34:14.955Z"
+        },
+        {
+          "signal": "content",
+          "state": "unknown",
+          "unknownReason": "inconclusive",
+          "weight": 0,
+          "summary": "content check skipped (HTTP 403)",
+          "evidence": {},
+          "source": "https://quibi.com/",
+          "checkedAt": "2026-10-04T06:34:14.955Z"
+        },
+        {
+          "signal": "tls",
+          "state": "alive",
+          "weight": 0.2,
+          "summary": "valid TLS certificate, 67 days left (issuer Google Trust Services)",
+          "evidence": {
+            "ok": true,
+            "validFrom": "2026-09-11T13:57:08.000Z",
+            "validTo": "2026-12-10T14:54:39.000Z",
+            "issuer": "Google Trust Services",
+            "subject": "quibi.com",
+            "authorized": true,
+            "daysLeft": 67
+          },
+          "checkedAt": "2026-10-04T06:34:14.936Z"
+        },
+        {
+          "signal": "x-profile",
+          "state": "dead",
+          "kind": "stale",
+          "weight": 0.6,
+          "summary": "@quibi bio looks stale: \"We've moved! Please visit us at our\"",
+          "evidence": {
+            "handle": "Quibi",
+            "name": "Roku",
+            "bio": "We've moved! Please visit us at our new home: @TheRokuChannel.",
+            "followers": 70,
+            "tweets": 0,
+            "joined": "Tue Oct 11 16:53:52 +0000 2016",
+            "protected": false,
+            "staleMatch": "We've moved! Please visit us at our"
+          },
+          "source": "https://api.fxtwitter.com/2/profile/quibi",
+          "checkedAt": "2026-10-04T06:34:58.416Z",
+          "confirmation": {
+            "attempts": 1,
+            "originalState": "dead",
+            "originalSummary": "@quibi bio looks stale: \"We've moved! Please visit us at our\"",
+            "outcome": "confirmed"
+          }
+        },
+        {
+          "signal": "x-activity",
+          "state": "unknown",
+          "unknownReason": "inconclusive",
+          "weight": 0,
+          "summary": "no tweets visible for @quibi",
+          "evidence": {
+            "tweetCount": 0
+          },
+          "source": "https://api.fxtwitter.com/2/profile/quibi/statuses",
+          "checkedAt": "2026-10-04T06:34:19.369Z"
+        },
+        {
+          "signal": "jobs",
+          "state": "unknown",
+          "unknownReason": "inconclusive",
+          "weight": 0,
+          "summary": "no public Greenhouse/Ashby/Lever board for quibi (absence of evidence, not counted)",
+          "evidence": {
+            "slugs": [
+              "quibi"
+            ],
+            "slugsGuessed": true,
+            "found": [],
+            "errors": [],
+            "absent": [
+              "greenhouse/quibi",
+              "ashby/quibi",
+              "lever/quibi"
+            ]
+          },
+          "checkedAt": "2026-10-04T06:34:15.222Z"
+        }
+      ],
+      "startedAt": "2026-10-04T06:34:14.842Z",
+      "finishedAt": "2026-10-04T06:34:59.257Z",
+      "tool": {
+        "name": "isitdead",
+        "version": "0.1.0"
+      },
+      "confirmation": {
+        "negatives": 1,
+        "confirmed": 1,
+        "flippedAlive": 0,
+        "unconfirmed": 0,
+        "errors": 0,
+        "recovered": 0,
+        "stillError": 0,
+        "attempts": 1
+      },
+      "discoveryVerdict": "DORMANT"
+    },
+    {
+      "target": {
+        "input": "fast.co",
+        "name": "Fast",
+        "domain": "fast.co"
+      },
+      "verdict": {
+        "verdict": "UNKNOWN",
+        "confidence": 0.1,
+        "why": [
+          "+ dns: fast.co resolves (3.33.139.32)",
+          "? http: fetching fast.co failed: UND_ERR_CONNECT_TIMEOUT Connect Timeout Error (attempted address: fast.co:443, timeout: 10000ms) (not counted as dead)",
+          "? tls: TLS check on fast.co:443 failed: ETIMEDOUT (not counted as dead)"
+        ],
+        "scores": {
+          "alive": 0.1,
+          "gone": 0,
+          "stale": 0,
+          "unknownErrors": 2
+        }
+      },
+      "signals": [
+        {
+          "signal": "dns",
+          "state": "alive",
+          "weight": 0.1,
+          "summary": "fast.co resolves (3.33.139.32)",
+          "evidence": {
+            "ok": true,
+            "addresses": [
+              "3.33.139.32"
+            ]
+          },
+          "checkedAt": "2026-10-04T06:34:15.938Z"
+        },
+        {
+          "signal": "http",
+          "state": "unknown",
+          "unknownReason": "error",
+          "weight": 0,
+          "summary": "fetching fast.co failed: UND_ERR_CONNECT_TIMEOUT Connect Timeout Error (attempted address: fast.co:443, timeout: 10000ms) (not counted as dead)",
+          "evidence": {
+            "error": "Connect Timeout Error (attempted address: fast.co:443, timeout: 10000ms)",
+            "code": "UND_ERR_CONNECT_TIMEOUT",
+            "attempts": [
+              "https://fast.co/"
+            ],
+            "chain": []
+          },
+          "source": "https://fast.co/",
+          "checkedAt": "2026-10-04T06:35:42.813Z",
+          "confirmation": {
+            "attempts": 3,
+            "originalState": "unknown",
+            "originalSummary": "fetching fast.co failed: UND_ERR_CONNECT_TIMEOUT Connect Timeout Error (attempted address: fast.co:443, timeout: 10000ms) (not counted as dead)",
+            "outcome": "still-error"
+          }
+        },
+        {
+          "signal": "hosting",
+          "state": "unknown",
+          "unknownReason": "inconclusive",
+          "weight": 0,
+          "summary": "no page fetched, hosting check skipped",
+          "evidence": {},
+          "source": "https://fast.co/",
+          "checkedAt": "2026-10-04T06:34:26.016Z"
+        },
+        {
+          "signal": "content",
+          "state": "unknown",
+          "unknownReason": "inconclusive",
+          "weight": 0,
+          "summary": "no page fetched, content check skipped",
+          "evidence": {},
+          "source": "https://fast.co/",
+          "checkedAt": "2026-10-04T06:34:26.016Z"
+        },
+        {
+          "signal": "tls",
+          "state": "unknown",
+          "unknownReason": "error",
+          "weight": 0,
+          "summary": "TLS check on fast.co:443 failed: ETIMEDOUT (not counted as dead)",
+          "evidence": {
+            "ok": false,
+            "code": "ETIMEDOUT",
+            "message": "TLS handshake timed out"
+          },
+          "checkedAt": "2026-10-04T06:36:18.828Z",
+          "confirmation": {
+            "attempts": 3,
+            "originalState": "unknown",
+            "originalSummary": "TLS check on fast.co:443 failed: ETIMEDOUT (not counted as dead)",
+            "outcome": "still-error"
+          }
+        },
+        {
+          "signal": "jobs",
+          "state": "unknown",
+          "unknownReason": "inconclusive",
+          "weight": 0,
+          "summary": "no public Greenhouse/Ashby/Lever board for fast (absence of evidence, not counted)",
+          "evidence": {
+            "slugs": [
+              "fast"
+            ],
+            "slugsGuessed": true,
+            "found": [],
+            "errors": [],
+            "absent": [
+              "greenhouse/fast",
+              "ashby/fast",
+              "lever/fast"
+            ]
+          },
+          "checkedAt": "2026-10-04T06:34:16.506Z"
+        }
+      ],
+      "startedAt": "2026-10-04T06:34:15.932Z",
+      "finishedAt": "2026-10-04T06:36:18.828Z",
+      "tool": {
+        "name": "isitdead",
+        "version": "0.1.0"
+      },
+      "confirmation": {
+        "negatives": 0,
+        "confirmed": 0,
+        "flippedAlive": 0,
+        "unconfirmed": 0,
+        "errors": 2,
+        "recovered": 0,
+        "stillError": 2,
+        "attempts": 6
+      },
+      "discoveryVerdict": "UNKNOWN"
+    },
+    {
+      "target": {
+        "input": "juicero.com",
+        "name": "Juicero",
+        "domain": "juicero.com",
+        "x": "juicero"
+      },
+      "verdict": {
+        "verdict": "ALIVE",
+        "confidence": 0.75,
+        "why": [
+          "+ content: page mentions \"juicero\" (title: \"Juicero - Sparkling Water - Sparkling water that works as hard as you do.\")",
+          "+ http: HTTP 200",
+          "+ tls: valid TLS certificate, 68 days left (issuer Google Trust Services)",
+          "+ x-profile: @juicero exists (3 followers), bio has no staleness markers",
+          "+ dns: juicero.com resolves (104.21.54.171, 172.67.140.176)",
+          "+ hosting: no suspended, parked or missing-site markers"
+        ],
+        "scores": {
+          "alive": 1.1,
+          "gone": 0,
+          "stale": 0,
+          "unknownErrors": 0
+        }
+      },
+      "signals": [
+        {
+          "signal": "dns",
+          "state": "alive",
+          "weight": 0.1,
+          "summary": "juicero.com resolves (104.21.54.171, 172.67.140.176)",
+          "evidence": {
+            "ok": true,
+            "addresses": [
+              "104.21.54.171",
+              "172.67.140.176"
+            ]
+          },
+          "checkedAt": "2026-10-04T06:34:16.052Z"
+        },
+        {
+          "signal": "http",
+          "state": "alive",
+          "weight": 0.2,
+          "summary": "HTTP 200",
+          "evidence": {
+            "status": 200,
+            "finalUrl": "https://juicero.com/",
+            "chain": [
+              "200 https://juicero.com/"
+            ],
+            "title": "Juicero - Sparkling Water - Sparkling water that works as hard as you do.",
+            "server": "cloudflare"
+          },
+          "source": "https://juicero.com/",
+          "checkedAt": "2026-10-04T06:34:17.329Z"
+        },
+        {
+          "signal": "hosting",
+          "state": "alive",
+          "weight": 0.1,
+          "summary": "no suspended, parked or missing-site markers",
+          "evidence": {},
+          "source": "https://juicero.com/",
+          "checkedAt": "2026-10-04T06:34:17.330Z"
+        },
+        {
+          "signal": "content",
+          "state": "alive",
+          "weight": 0.3,
+          "summary": "page mentions \"juicero\" (title: \"Juicero - Sparkling Water - Sparkling water that works as hard as you do.\")",
+          "evidence": {
+            "name": "Juicero",
+            "nameDerived": false,
+            "title": "Juicero - Sparkling Water - Sparkling water that works as hard as you do.",
+            "textLength": 1372,
+            "matchedVariant": "juicero"
+          },
+          "source": "https://juicero.com/",
+          "checkedAt": "2026-10-04T06:34:17.331Z"
+        },
+        {
+          "signal": "tls",
+          "state": "alive",
+          "weight": 0.2,
+          "summary": "valid TLS certificate, 68 days left (issuer Google Trust Services)",
+          "evidence": {
+            "ok": true,
+            "validFrom": "2026-09-12T23:15:15.000Z",
+            "validTo": "2026-12-12T00:14:03.000Z",
+            "issuer": "Google Trust Services",
+            "subject": "juicero.com",
+            "authorized": true,
+            "daysLeft": 68
+          },
+          "checkedAt": "2026-10-04T06:34:16.082Z"
+        },
+        {
+          "signal": "x-profile",
+          "state": "alive",
+          "weight": 0.2,
+          "summary": "@juicero exists (3 followers), bio has no staleness markers",
+          "evidence": {
+            "handle": "juicero",
+            "name": "juicero",
+            "bio": "Juicero - Sparkling water that works as hard as you do.",
+            "followers": 3,
+            "tweets": 0,
+            "joined": "Tue May 27 16:46:43 +0000 2025",
+            "protected": false
+          },
+          "source": "https://api.fxtwitter.com/2/profile/juicero",
+          "checkedAt": "2026-10-04T06:34:17.826Z"
+        },
+        {
+          "signal": "x-activity",
+          "state": "unknown",
+          "unknownReason": "inconclusive",
+          "weight": 0,
+          "summary": "no tweets visible for @juicero",
+          "evidence": {
+            "tweetCount": 0
+          },
+          "source": "https://api.fxtwitter.com/2/profile/juicero/statuses",
+          "checkedAt": "2026-10-04T06:34:19.955Z"
+        },
+        {
+          "signal": "jobs",
+          "state": "unknown",
+          "unknownReason": "inconclusive",
+          "weight": 0,
+          "summary": "no public Greenhouse/Ashby/Lever board for juicero (absence of evidence, not counted)",
+          "evidence": {
+            "slugs": [
+              "juicero"
+            ],
+            "slugsGuessed": true,
+            "found": [],
+            "errors": [],
+            "absent": [
+              "greenhouse/juicero",
+              "ashby/juicero",
+              "lever/juicero"
+            ]
+          },
+          "checkedAt": "2026-10-04T06:34:16.350Z"
+        }
+      ],
+      "startedAt": "2026-10-04T06:34:16.014Z",
+      "finishedAt": "2026-10-04T06:36:18.828Z",
+      "tool": {
+        "name": "isitdead",
+        "version": "0.1.0"
+      },
+      "confirmation": {
+        "negatives": 0,
+        "confirmed": 0,
+        "flippedAlive": 0,
+        "unconfirmed": 0,
+        "errors": 0,
+        "recovered": 0,
+        "stillError": 0,
+        "attempts": 0
+      },
+      "discoveryVerdict": "ALIVE"
+    }
+  ]
+}

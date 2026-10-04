@@ -138,3 +138,45 @@ describe('tls probe', () => {
     expect(rs[0]!.state).toBe('alive');
   });
 });
+
+describe('expired hosting page (real-world: theranos.com)', () => {
+  it('a DNS-host expiry page is a dead hosting signal even with HTTP 200', async () => {
+    const f = mockFetch([['https://theranos.test/', () => html('<title>Expired DNS Hosting Services | DNS Made Easy</title>')]]);
+    const rs = await webProbe.run(buildTarget('theranos.test'), ctx(f));
+    expect(get(rs, 'http').state).toBe('alive');
+    expect(get(rs, 'hosting').state).toBe('dead');
+  });
+
+  it('nothing on 443 is inconclusive, not an error', async () => {
+    const rs = await tlsProbe.run(buildTarget('x.test'), ctx(mockFetch([]), { tls: async () => ({ ok: false, code: 'ECONNREFUSED', message: '' }) }));
+    expect(rs[0]!.unknownReason).toBe('inconclusive');
+  });
+});
+
+describe('absorbed or shut down', () => {
+  it('a "Sunsetting X" page is a shutdown notice (real-world: atom.io)', async () => {
+    const f = mockFetch([
+      ['https://atom.test/', () => redirect('https://blog.other.test/sunsetting-atom')],
+      ['https://blog.other.test/', () => html(`<title>Sunsetting Atom - The Blog</title><h1>Sunsetting Atom</h1> ${LONG_TEXT}`)],
+    ]);
+    const rs = await webProbe.run(buildTarget('atom.test', { name: 'Atom' }), ctx(f));
+    expect(get(rs, 'content').state).toBe('dead');
+    expect(get(rs, 'content').summary).toMatch(/shutdown notice/);
+    expect(get(rs, 'http').state).toBe('dead');
+  });
+
+  it('shutdown words in body text alone do not count', async () => {
+    const f = mockFetch([['https://acme.test/', () => html(`<title>Acme</title><h1>Acme</h1><p>We help teams wind down legacy systems. Acme. ${LONG_TEXT}</p>`)]]);
+    const rs = await webProbe.run(buildTarget('acme.test'), ctx(f));
+    expect(get(rs, 'content').state).toBe('alive');
+  });
+
+  it('a rebrand redirect that still names the company stays balanced', async () => {
+    const f = mockFetch([
+      ['https://old.test/', () => redirect('https://newbrand.test/')],
+      ['https://newbrand.test/', () => html(`<title>Newbrand (formerly Old)</title><p>Old is now Newbrand. ${LONG_TEXT}</p>`)],
+    ]);
+    const rs = await webProbe.run(buildTarget('old.test', { name: 'Old' }), ctx(f));
+    expect(get(rs, 'content').state).toBe('alive');
+  });
+});

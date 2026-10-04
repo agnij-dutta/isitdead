@@ -1,5 +1,5 @@
 import { connect } from 'node:tls';
-import { alive, daysBetween, dead, errored, type Probe } from '../context.js';
+import { alive, daysBetween, dead, errored, inconclusive, type Probe } from '../context.js';
 
 export type TlsAnswer =
   | { ok: true; validFrom: string; validTo: string; issuer?: string; subject?: string; authorized: boolean; authorizationError?: string }
@@ -39,6 +39,13 @@ export const tlsProbe: Probe = {
   async run(t, ctx) {
     const host = t.domain!;
     const a = await ctx.tls(host);
+    if (!a.ok && a.code === 'ECONNREFUSED') {
+      // A clean answer, not a failure: nothing listens on 443.
+      return [inconclusive(ctx, 'tls', `nothing listening on ${host}:443 (no HTTPS)`, { evidence: { ...a } })];
+    }
+    if (!a.ok && a.code === 'ENOTFOUND') {
+      return [inconclusive(ctx, 'tls', `${host} did not resolve for TLS (see dns signal)`, { evidence: { ...a } })];
+    }
     if (!a.ok) {
       return [errored(ctx, 'tls', `TLS check on ${host}:443 failed: ${a.code} (not counted as dead)`, { evidence: { ...a } })];
     }
