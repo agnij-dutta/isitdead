@@ -6,6 +6,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [0.1.0] - 2026-10-04
 
+Published to npm on 2026-10-05 as [`isitdead`](https://www.npmjs.com/package/isitdead).
+
 ### Added
 
 - CLI and library: `isitdead <target>`, `batch <csv>`, `serve`, `demo-flaky`.

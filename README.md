@@ -1,5 +1,7 @@
 # isitdead
 
+[![npm](https://img.shields.io/npm/v/isitdead)](https://www.npmjs.com/package/isitdead)
+
 Is this company or project actually alive? Give it a domain, a GitHub org, an X handle, an npm package or a name, and it answers **ALIVE / DORMANT / DEAD / UNKNOWN** with a confidence, a short "why" list, and the evidence and timestamp behind every signal. For job seekers, investors and anyone doing diligence on a company or a dependency.
 
 ```
@@ -28,6 +30,16 @@ The harder problem is the checker lying to you. Public APIs rate-limit under con
 Requires Node 22 or newer. No API keys.
 
 ```bash
+npx isitdead stripe.com --github stripe --x stripe   # one real check (network)
+npx isitdead demo-flaky                              # offline, simulated rate-limit trap
+
+npm install -g isitdead    # puts the isitdead command on your PATH
+npm install isitdead       # the library
+```
+
+From source:
+
+```bash
 git clone https://github.com/agnij-dutta/isitdead.git
 cd isitdead
 npm ci
@@ -38,7 +50,7 @@ node dist/cli.js stripe.com --github stripe --x stripe   # one real check (netwo
 node dist/cli.js demo-flaky                              # offline, simulated rate-limit trap
 ```
 
-To get an `isitdead` command on your PATH, run `npm link` after building. The examples below use `isitdead`; `node dist/cli.js` works the same.
+From a clone, `npm link` after building puts your local build on your PATH. The examples below use `isitdead`; `npx isitdead` and `node dist/cli.js` work the same.
 
 ## Usage
 
